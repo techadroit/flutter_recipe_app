@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/MainBloc.dart';
@@ -14,34 +13,32 @@ import 'blocs/actions.dart';
 import 'blocs/events.dart';
 
 void main() {
-    BlocSupervisor.delegate = SimpleBlocDelegate();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
 
   runApp(new MaterialApp(
     title: "Widget",
     initialRoute: '/',
     routes: {
-      '/':(context) => BlocProvider(
-      create: (BuildContext context) => MainBloc(),
-      child: BottomWidgetContainer(),
-    ),
-    '/youtube_video':(context) => YoutubeWidget()
+      '/': (context) => BlocProvider(
+            create: (BuildContext context) => MainBloc(),
+            child: BottomWidgetContainer(),
+          ),
+      '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
-      fontFamily: 'Raleway',
-      textTheme:TextTheme(
-        headline: TextStyle(fontSize: 24,fontFamily: 'RobotMono')
-      )
-    ),
+        fontFamily: 'Raleway',
+        textTheme: TextTheme(
+            headline: TextStyle(fontSize: 24, fontFamily: 'RobotMono'))),
   ));
 }
 
 class BottomWidgetContainer extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
+    return SafeArea(
+        child: Scaffold(
       body: BlocBuilder<MainBloc, RecipeEvent>(
-        bloc: BlocProvider.of(context),
+          bloc: BlocProvider.of(context),
           builder: (context, state) {
             if (state is BottomNavigationEvent) {
               var index = state.index;
@@ -62,12 +59,11 @@ class BottomWidgetContainer extends StatelessWidget {
             }
           }),
       bottomNavigationBar: BottomNavigationWidgetStateFull(),
-    );
+    ));
   }
 }
 
 class ScreenWidget extends StatelessWidget {
-
   Color color;
 
   ScreenWidget(this.color);
@@ -78,13 +74,11 @@ class ScreenWidget extends StatelessWidget {
   }
 }
 
-class BottomNavigationWidgetStateFull extends StatefulWidget{
-
+class BottomNavigationWidgetStateFull extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {    
+  State<StatefulWidget> createState() {
     return BottomNavigationWidget();
   }
-
 }
 
 class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
@@ -99,9 +93,9 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
     return BottomNavigationBar(
         onTap: (index) {
           setState(() {
-             currentIndex = index;
+            currentIndex = index;
           });
-         
+
           bloc.add(BottomNavigationAction(index));
         },
         currentIndex: currentIndex,
@@ -127,21 +121,20 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
   }
 }
 
-Widget getRecipeWidget(){
-  
+Widget getRecipeWidget() {
   final RecipeRepository recipeRepository = RecipeRepository(
     recipeApiClient: RecipeApiClient(
       httpClient: http.Client(),
     ),
   );
   return BlocProvider(
-    create: (BuildContext context) => RecipeListBloc(repository: recipeRepository),
+    create: (BuildContext context) =>
+        RecipeListBloc(repository: recipeRepository),
     child: RecipeListContainerWidget(),
-    );
+  );
 }
 
-Widget getVideoRecipeWidget(){
-  
+Widget getVideoRecipeWidget() {
   final RecipeRepository recipeRepository = RecipeRepository(
     recipeApiClient: RecipeApiClient(
       httpClient: http.Client(),
@@ -149,7 +142,8 @@ Widget getVideoRecipeWidget(){
   );
   return BlocProvider(
     key: PageStorageKey("video"),
-    create: (BuildContext context) => RecipeListBloc(repository: recipeRepository)..add(SearchVideos()),
+    create: (BuildContext context) =>
+        RecipeListBloc(repository: recipeRepository)..add(SearchVideos()),
     child: VideoListWidgetStatefull(),
-    );
+  );
 }

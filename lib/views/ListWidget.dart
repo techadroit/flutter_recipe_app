@@ -4,6 +4,7 @@ import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
+import 'package:search_widget/search_widget.dart';
 
 abstract class ListItem {}
 
@@ -15,17 +16,15 @@ class RecipeItem extends ListItem {
   bool isSaved = false;
 }
 
-class RecipeListItemStateFullWidget extends StatefulWidget{
-
-RecipeItem item;
-RecipeListItemStateFullWidget(this.item);
+class RecipeListItemStateFullWidget extends StatefulWidget {
+  RecipeItem item;
+  RecipeListItemStateFullWidget(this.item);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return RecipeListItemWidget(item);
   }
-
 }
 
 class RecipeListItemWidget extends State<RecipeListItemStateFullWidget> {
@@ -75,9 +74,9 @@ class RecipeListItemWidget extends State<RecipeListItemStateFullWidget> {
                           item.isSaved ? Icons.favorite : Icons.favorite_border,
                           color: item.isSaved ? Colors.red : Colors.grey,
                         ),
-                        onPressed: (){
-                          setState((){
-                              item.isSaved = true;
+                        onPressed: () {
+                          setState(() {
+                            item.isSaved = true;
                           });
                         }),
                   )
@@ -109,24 +108,30 @@ class RecipeListContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bloc = BlocProvider.of(context);
-    return Center(
-      child: BlocBuilder(
-        bloc: bloc,
-        builder: (context, state) {
-          if (state is RecipeUninitialized) {
-            bloc.add(SearchRecipes());
-          } else if (state is RecipeLoaded) {
-            var list = state.results;
-            return ListView.builder(
-                itemCount: list.length,
-                itemBuilder: (context, index) {
-                  return RecipeListItemStateFullWidget(list[index]);
-                });
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+    return Column(children: <Widget>[
+      Container(
+          child: SearchWidget(dataList: [], popupListItemBuilder: null,
+           selectedItemBuilder: null, queryBuilder: null),
       ),
-    );
+      Expanded(
+        child: BlocBuilder(
+          bloc: bloc,
+          builder: (context, state) {
+            if (state is RecipeUninitialized) {
+              bloc.add(SearchRecipes());
+            } else if (state is RecipeLoaded) {
+              var list = state.results;
+              return ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return RecipeListItemStateFullWidget(list[index]);
+                  });
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+      ),
+    ]);
   }
 }
