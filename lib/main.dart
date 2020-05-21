@@ -7,7 +7,6 @@ import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_flutter/views/ListWidget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
-import 'package:recipe_flutter/views/youtube_widget.dart';
 
 import 'blocs/actions.dart';
 import 'blocs/events.dart';
@@ -23,7 +22,8 @@ void main() {
             create: (BuildContext context) => MainBloc(),
             child: BottomWidgetContainer(),
           ),
-      '/youtube_video': (context) => YoutubeWidget()
+      '/search': (context) => ScreenWidget(Colors.red)
+      // '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
         fontFamily: 'Raleway',
@@ -147,3 +147,16 @@ Widget getVideoRecipeWidget() {
     child: VideoListWidgetStatefull(),
   );
 }
+
+var searchView = Center(
+    child: Wrap(children: [
+  Container(
+    margin: EdgeInsets.all(8),
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1.0, color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(12.0))),
+    child: Row(children: [Icon(Icons.search),Expanded(child:Text('Search'))]),
+  )
+]));

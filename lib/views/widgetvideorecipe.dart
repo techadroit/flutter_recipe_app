@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
-import 'package:recipe_flutter/views/ListWidget.dart';
-import 'package:recipe_flutter/views/youtube_widget.dart';
 
 class VideoRecipeItem {
   String title;
@@ -85,7 +83,7 @@ class VideoRecipeItemWidget extends StatelessWidget {
         children: <Widget>[
           GestureDetector(
             onTap: () =>{
-              Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
+              // Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
             } ,
             child: 
           Image.network(

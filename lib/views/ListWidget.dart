@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
+import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:search_widget/search_widget.dart';
 
 abstract class ListItem {}
 
@@ -109,10 +109,7 @@ class RecipeListContainerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     bloc = BlocProvider.of(context);
     return Column(children: <Widget>[
-      Container(
-          child: SearchWidget(dataList: [], popupListItemBuilder: null,
-           selectedItemBuilder: null, queryBuilder: null),
-      ),
+      searchView,
       Expanded(
         child: BlocBuilder(
           bloc: bloc,
