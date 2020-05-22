@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/views/ListWidget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
-import 'package:recipe_flutter/views/widgetvideorecipe.dart';
-import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 
 class BottomNavigationEvent extends RecipeEvent {
   int index = 0;

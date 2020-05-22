@@ -6,6 +6,7 @@ import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_flutter/views/ListWidget.dart';
+import 'package:recipe_flutter/views/search_widget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 
 import 'blocs/actions.dart';
@@ -22,7 +23,7 @@ void main() {
             create: (BuildContext context) => MainBloc(),
             child: BottomWidgetContainer(),
           ),
-      '/search': (context) => ScreenWidget(Colors.red)
+      '/search': (context) => SearchWiget()
       // '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(

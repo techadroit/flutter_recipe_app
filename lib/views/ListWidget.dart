@@ -108,7 +108,8 @@ class RecipeListContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bloc = BlocProvider.of(context);
-    return Column(children: <Widget>[
+    return    
+     Column(children: <Widget>[
       GestureDetector(
         onTap:(){
           Navigator.pushNamed(context, '/search');

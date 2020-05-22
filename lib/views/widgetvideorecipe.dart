@@ -14,7 +14,7 @@ class VideoRecipeItem {
 class VideoListWidgetStatefull extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
+    
     return VideoRecipeListWidget();
   }
 }
@@ -70,7 +70,7 @@ class VideoRecipeListWidget extends State<VideoListWidgetStatefull> {
 class VideoRecipeItemWidget extends StatelessWidget {
   VideoRecipeItem item;
 
-  VideoRecipeItemWidget(this.item) {}
+  VideoRecipeItemWidget(this.item);
 
   @override
   Widget build(BuildContext context) {

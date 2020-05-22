@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
+import 'package:recipe_flutter/api_response/AutoCompleteResponse.dart';
 import 'package:recipe_flutter/api_response/SearchReicpeResponse.dart';
 
 class RecipeApiClient {
@@ -22,6 +23,18 @@ class RecipeApiClient {
 
     final recipeJson = jsonDecode(recipeResponse.body);
     return SearchRecipeResponse.fromJson(recipeJson);
+  }
+
+  Future<List<AutoCompleteResponse>> autoComplete(String query,int number) async{
+    String url =
+        '$basedurl/recipes/autocomplete?apiKey=$apikey&query=$query&number=$number';
+    final recipeResponse = await this.httpClient.get(url);
+
+    if (recipeResponse.statusCode != 200)
+      throw new Exception(recipeResponse.body);
+
+    final recipeJson = jsonDecode(recipeResponse.body) as List;
+    return recipeJson.map((e) => AutoCompleteResponse.fromJson(e)).toList();
   }
   
   Future<VideoListResponse> loadVideoFor(
