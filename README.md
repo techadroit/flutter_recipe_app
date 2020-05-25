@@ -1,6 +1,8 @@
 # recipe_flutter
 
-A new Flutter project.
+A Simple recipe app build in flutter. This Repo demonstrate of how we can use Bloc (https://bloclibrary.dev/#/) for state management in flutter.
+
+This repo is currently in development.
 
 ## Getting Started
 
