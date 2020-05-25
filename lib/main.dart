@@ -122,15 +122,17 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
   }
 }
 
-Widget getRecipeWidget() {
-  final RecipeRepository recipeRepository = RecipeRepository(
+final RecipeRepository recipeRepository = RecipeRepository(
     recipeApiClient: RecipeApiClient(
       httpClient: http.Client(),
     ),
   );
+  var listbloc = RecipeListBloc(repository: recipeRepository);
+
+Widget getRecipeWidget() {
+  
   return BlocProvider(
-    create: (BuildContext context) =>
-        RecipeListBloc(repository: recipeRepository),
+    create: (BuildContext context) => listbloc,
     child: RecipeListContainerWidget(),
   );
 }

@@ -11,7 +11,7 @@ class SearchWiget extends StatelessWidget {
   Widget build(BuildContext context) {
     final RecipeRepository recipeRepository = RecipeRepository(
         recipeApiClient: RecipeApiClient(httpClient: http.Client()));
-    
+
     return MaterialApp(
         home: Scaffold(
             body: SafeArea(
@@ -26,8 +26,10 @@ Widget searchWidget() {
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[SearchStateLessWidget(),
-        Expanded(child: SearchListWidget())],
+        children: <Widget>[
+          SearchStateLessWidget(),
+          Expanded(child: SearchListWidget())
+        ],
       ));
 }
 
@@ -83,8 +85,6 @@ class SearchStateLessWidget extends StatelessWidget {
 // }
 
 class SearchListWidget extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SearchBlocs, SearchEvent>(
@@ -96,15 +96,25 @@ class SearchListWidget extends StatelessWidget {
                 itemCount: list.length,
                 itemBuilder: (context, position) {
                   var item = list[position];
-                  return Container(
-                      child: Text(
-                    item.title,
-                    style: TextStyle(color: Colors.grey),
-                  ));
+                  return getSearchItemWidget(item.title);
                 });
           } else {
-            return Container(color: Colors.green,child: Text("data"),);
+            return Container(
+              color: Colors.white,
+              child: Text("No Result Found"),
+            );
           }
         });
   }
+}
+
+Widget getSearchItemWidget(String title) {
+  return Container(
+    margin: EdgeInsets.symmetric(horizontal: 12),
+    padding: EdgeInsets.all(8),
+    alignment: Alignment.centerLeft,
+      child: Text(
+    title,
+    style: TextStyle(color: Colors.grey,fontSize: 18,fontFamily: 'RobotoMono-Medium'),
+  ));
 }

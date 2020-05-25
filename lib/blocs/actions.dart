@@ -1,7 +1,10 @@
 
 class RecipeAction {}
 
-class SearchRecipes extends RecipeAction {}
+class SearchRecipes extends RecipeAction {
+  String keyword;
+  SearchRecipes({this.keyword="chicken"});
+}
 
 class SearchVideos extends RecipeAction{}
 

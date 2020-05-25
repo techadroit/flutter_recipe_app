@@ -24,7 +24,7 @@ class RecipeListBloc extends Bloc<RecipeAction, RecipeEvent> {
       try {
         // yield RecipeError();
         SearchRecipeResponse response =
-            await repository.searchRecipeFor("chicken", 1);
+            await repository.searchRecipeFor(event.keyword, 1);
         yield RecipeLoaded(toRecipeItems(response));
       } catch (_) {
         yield RecipeError();
