@@ -30,7 +30,69 @@ class RecipeListItemStateFullWidget extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return RecipeListItemWidget(item);
+    return RecipeListItemWidgetV2(item);
+  }
+}
+
+
+class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
+  RecipeItem item;
+
+  RecipeListItemWidgetV2(this.item);
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+        child: Card(
+            elevation: 5,
+            child: Padding(
+                padding: EdgeInsets.all(0),
+                child:
+                    Column( children: <Widget>[
+                      Container(
+                        child:Image.network(
+                          item.imageUrl,
+                          height: 240,
+                          width: double.infinity,
+                          fit: BoxFit.fill
+                        )
+                      )
+                      ,
+                  Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[                        
+                        Expanded(
+                            child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: <Widget>[
+                              Padding(
+                                  padding: EdgeInsets.all(8),
+                                  child: Text(
+                                    item.heading,
+                                    style: TextStyle(
+                                        fontSize: 17,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'RobotoMono'),
+                                  )),
+                            ])),
+                            Container(
+                    child: IconButton(
+                        icon: Icon(
+                          item.isSaved ? Icons.favorite : Icons.favorite_border,
+                          color: item.isSaved ? Colors.red : Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            item.isSaved = true;
+                          });
+                        }),
+                  )
+                
+                      ]),
+                  ]))));
   }
 }
 
