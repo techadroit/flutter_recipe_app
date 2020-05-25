@@ -5,6 +5,7 @@ import 'package:recipe_flutter/blocs/SearchBlocs.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
+import 'package:recipe_flutter/views/ListWidget.dart';
 
 class SearchWiget extends StatelessWidget {
   @override
@@ -12,12 +13,12 @@ class SearchWiget extends StatelessWidget {
     final RecipeRepository recipeRepository = RecipeRepository(
         recipeApiClient: RecipeApiClient(httpClient: http.Client()));
 
-    return MaterialApp(
-        home: Scaffold(
+    return 
+         Scaffold(
             body: SafeArea(
                 child: BlocProvider<SearchBlocs>(
                     create: (context) => SearchBlocs(recipeRepository),
-                    child: searchWidget()))));
+                    child: searchWidget())));
   }
 }
 
@@ -96,7 +97,7 @@ class SearchListWidget extends StatelessWidget {
                 itemCount: list.length,
                 itemBuilder: (context, position) {
                   var item = list[position];
-                  return getSearchItemWidget(item.title);
+                  return getSearchItemWidget(context,item.title);
                 });
           } else {
             return Container(
@@ -108,13 +109,18 @@ class SearchListWidget extends StatelessWidget {
   }
 }
 
-Widget getSearchItemWidget(String title) {
-  return Container(
+Widget getSearchItemWidget(BuildContext context,String title) {
+  return GestureDetector(
+    onTap: (){
+      Navigator.pushNamed(context, "/searchList",
+      arguments: SearchItem(keyword:title));
+    },
+    child : Container(
     margin: EdgeInsets.symmetric(horizontal: 12),
     padding: EdgeInsets.all(8),
     alignment: Alignment.centerLeft,
       child: Text(
     title,
     style: TextStyle(color: Colors.grey,fontSize: 18,fontFamily: 'RobotoMono-Medium'),
-  ));
+  )));
 }

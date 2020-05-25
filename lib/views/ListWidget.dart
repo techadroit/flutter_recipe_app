@@ -5,6 +5,13 @@ import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
+import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
+import 'package:http/http.dart' as http;
+
+class SearchItem {
+  String keyword;
+  SearchItem({this.keyword = "chicken"});
+}
 
 abstract class ListItem {}
 
@@ -84,22 +91,22 @@ class RecipeListItemWidget extends State<RecipeListItemStateFullWidget> {
   }
 }
 
-class RecipeListParentWidget extends StatelessWidget {
-  final RecipeRepository repository;
-  RecipeListParentWidget({Key key, @required this.repository})
-      : super(key: key);
+// class RecipeListParentWidget extends StatelessWidget {
+//   final RecipeRepository repository;
+//   RecipeListParentWidget({Key key, @required this.repository})
+//       : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "Recip List",
-      home: BlocProvider<RecipeListBloc>(
-        create: (context) => RecipeListBloc(repository: repository),
-        child: RecipeListContainerWidget(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: "Recip List",
+//       home: BlocProvider<RecipeListBloc>(
+//         create: (context) => RecipeListBloc(repository: repository),
+//         child: RecipeListContainerWidget(),
+//       ),
+//     );
+//   }
+// }
 
 class RecipeListContainerWidget extends StatelessWidget {
   RecipeListBloc bloc;
@@ -108,33 +115,58 @@ class RecipeListContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bloc = BlocProvider.of(context);
-    return    
-     Column(children: <Widget>[
+    return Column(children: <Widget>[
       GestureDetector(
-        onTap:(){
-          Navigator.pushNamed(context, '/search');
-        },
-        child:searchView
-      ),
-      Expanded(
-        child: BlocBuilder(
-          bloc: bloc,
-          builder: (context, state) {
-            if (state is RecipeUninitialized) {
-              bloc.add(SearchRecipes());
-            } else if (state is RecipeLoaded) {
-              var list = state.results;
-              return ListView.builder(
-                  itemCount: list.length,
-                  itemBuilder: (context, index) {
-                    return RecipeListItemStateFullWidget(list[index]);
-                  });
-            } else {
-              return Center(child: CircularProgressIndicator());
-            }
+          onTap: () {
+            Navigator.pushNamed(context, '/search');
           },
-        ),
+          child: searchView),
+      Expanded(
+        child: RecipeListWidget(new SearchItem()),
       ),
     ]);
+  }
+}
+
+class RecipeListWidget extends StatelessWidget {
+  SearchItem searchItem;
+  RecipeListWidget(this.searchItem);
+  @override
+  Widget build(BuildContext context) {
+    RecipeListBloc bloc = BlocProvider.of(context);
+    return BlocBuilder(
+      bloc: bloc,
+      builder: (context, state) {
+        if (state is RecipeUninitialized) {
+          bloc.add(SearchRecipes(keyword: searchItem.keyword));
+        } else if (state is RecipeLoaded) {
+          var list = state.results;
+          return ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (context, index) {
+                return RecipeListItemStateFullWidget(list[index]);
+              });
+        } else {
+          return Center(child: CircularProgressIndicator());
+        }
+      },
+    );
+  }
+}
+
+class RecipeListParentWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final SearchItem searchItem = ModalRoute.of(context).settings.arguments;
+    final RecipeRepository recipeRepository = RecipeRepository(
+      recipeApiClient: RecipeApiClient(
+        httpClient: http.Client(),
+      ),
+    );
+    var listbloc = RecipeListBloc(repository: recipeRepository);
+
+    return BlocProvider(
+        create: (BuildContext buildcontext) => listbloc,
+        child: RecipeListWidget(searchItem));
   }
 }

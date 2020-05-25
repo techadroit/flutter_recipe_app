@@ -23,7 +23,8 @@ void main() {
             create: (BuildContext context) => MainBloc(),
             child: BottomWidgetContainer(),
           ),
-      '/search': (context) => SearchWiget()
+      '/search': (context) => SearchWiget(),
+      '/searchList':(context) => RecipeListParentWidget(),
       // '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
