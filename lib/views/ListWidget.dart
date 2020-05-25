@@ -167,6 +167,9 @@ class RecipeListParentWidget extends StatelessWidget {
 
     return BlocProvider(
         create: (BuildContext buildcontext) => listbloc,
-        child: RecipeListWidget(searchItem));
+        child: Container(
+          color: Colors.white,
+          child: RecipeListWidget(searchItem),
+        ));
   }
 }

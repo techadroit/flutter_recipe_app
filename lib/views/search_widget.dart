@@ -28,17 +28,22 @@ Widget searchWidget() {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          SearchStateLessWidget(),
+          SearchWidget(),
           Expanded(child: SearchListWidget())
         ],
       ));
 }
 
-class SearchStateLessWidget extends StatelessWidget {
+class SearchWidget extends StatefulWidget {
+  @override
+  _SearchStateLessWidgetState createState() => _SearchStateLessWidgetState();
+}
+
+class _SearchStateLessWidgetState extends State<SearchWidget> {
+  
   @override
   Widget build(BuildContext context) {
-    SearchBlocs bloc = BlocProvider.of(context);
-
+    SearchBlocs bloc = BlocProvider.of(context);    
     return Center(
         child: Wrap(children: [
       Container(
@@ -52,6 +57,7 @@ class SearchStateLessWidget extends StatelessWidget {
           Icon(Icons.search),
           Expanded(
               child: TextField(
+                autofocus: true,
                   onChanged: (text) {
                     bloc.add(SearchAction(text));
                   },
