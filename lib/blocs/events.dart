@@ -1,7 +1,8 @@
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
+import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
+
 import 'package:recipe_flutter/views/ListWidget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 
@@ -11,6 +12,14 @@ class BottomNavigationEvent extends RecipeEvent {
 
   @override
   List<Object> get props => [index];
+}
+
+class RecipeDetailState extends RecipeEvent{
+  RecipeDetail recipeDetail;
+  RecipeDetailState(this.recipeDetail);
+
+  @override
+  List<Object> get props => [recipeDetail];
 }
 
 abstract class RecipeEvent extends Equatable {

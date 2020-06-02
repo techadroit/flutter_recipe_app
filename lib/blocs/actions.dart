@@ -6,6 +6,11 @@ class SearchRecipes extends RecipeAction {
   SearchRecipes({this.keyword="chicken"});
 }
 
+class FetchRecipeDetail extends RecipeAction{
+  String id;
+  FetchRecipeDetail({this.id});
+}
+
 class SearchVideos extends RecipeAction{}
 
 class BottomNavigationAction extends RecipeAction {

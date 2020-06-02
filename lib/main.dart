@@ -6,14 +6,21 @@ import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_flutter/views/ListWidget.dart';
+import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 
 import 'blocs/actions.dart';
 import 'blocs/events.dart';
-
+final RecipeRepository recipeRepository = RecipeRepository(
+    recipeApiClient: RecipeApiClient(
+      httpClient: http.Client(),
+    ),
+  );
+ 
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
+ 
 
   runApp(new MaterialApp(
     title: "Widget",
@@ -25,6 +32,7 @@ void main() {
           ),
       '/search': (context) => SearchWiget(),
       '/searchList':(context) => RecipeListParentWidget(),
+      '/recipeDetail':(context) => RecipeDetailParentWidget()
       // '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
@@ -122,13 +130,7 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
         ]);
   }
 }
-
-final RecipeRepository recipeRepository = RecipeRepository(
-    recipeApiClient: RecipeApiClient(
-      httpClient: http.Client(),
-    ),
-  );
-  var listbloc = RecipeListBloc(repository: recipeRepository);
+ var listbloc = RecipeListBloc(repository: recipeRepository);
 
 Widget getRecipeWidget() {
   
@@ -139,11 +141,6 @@ Widget getRecipeWidget() {
 }
 
 Widget getVideoRecipeWidget() {
-  final RecipeRepository recipeRepository = RecipeRepository(
-    recipeApiClient: RecipeApiClient(
-      httpClient: http.Client(),
-    ),
-  );
   return BlocProvider(
     key: PageStorageKey("video"),
     create: (BuildContext context) =>

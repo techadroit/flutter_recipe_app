@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
+import 'package:recipe_flutter/shared/dimens.dart';
 
 class VideoRecipeItem {
   String title;
@@ -118,9 +119,9 @@ class VideoRecipeItemWidgetV2 extends StatelessWidget {
               alignment: Alignment.center,
               children:<Widget>[
                 Image.network(item.thumbnailurl,
-                height: 240, width: double.infinity, fit: BoxFit.fill),    
+                height: IMAGE_HEIGHT, width: double.infinity, fit: BoxFit.cover),    
                 Container(
-                  height: 240,
+                  height: IMAGE_HEIGHT,
                   width: double.infinity,
                   color: Colors.black26,
                 ),           

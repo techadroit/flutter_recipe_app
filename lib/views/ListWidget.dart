@@ -7,6 +7,7 @@ import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
+import 'package:recipe_flutter/shared/dimens.dart';
 
 class SearchItem {
   String keyword;
@@ -29,7 +30,6 @@ class RecipeListItemStateFullWidget extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return RecipeListItemWidgetV2(item);
   }
 }
@@ -41,7 +41,11 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   RecipeListItemWidgetV2(this.item);
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: (){
+        Navigator.pushNamed(context,"/recipeDetail");
+        },
+      child:Container(
         padding: EdgeInsets.only(left: 8, right: 8, top: 8),
         child: Card(
             elevation: 5,
@@ -52,9 +56,9 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
                       Container(
                         child:Image.network(
                           item.imageUrl,
-                          height: 240,
+                          height: IMAGE_HEIGHT,
                           width: double.infinity,
-                          fit: BoxFit.fill
+                          fit: BoxFit.cover
                         )
                       )
                       ,
@@ -92,83 +96,10 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
                   )
                 
                       ]),
-                  ]))));
-  }
+                  ]))))  
+    );
+    }
 }
-
-class RecipeListItemWidget extends State<RecipeListItemStateFullWidget> {
-  RecipeItem item;
-
-  RecipeListItemWidget(this.item);
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-        child: Card(
-            elevation: 5,
-            child: Padding(
-                padding: EdgeInsets.all(0),
-                child:
-                    Stack(alignment: Alignment.bottomRight, children: <Widget>[
-                  Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Image.network(
-                          item.imageUrl,
-                          fit: BoxFit.fill,
-                          height: 140,
-                          width: 140,
-                        ),
-                        Expanded(
-                            child: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                              Padding(
-                                  padding: EdgeInsets.all(8),
-                                  child: Text(
-                                    item.heading,
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'RobotoMono'),
-                                  )),
-                            ]))
-                      ]),
-                  Container(
-                    child: IconButton(
-                        icon: Icon(
-                          item.isSaved ? Icons.favorite : Icons.favorite_border,
-                          color: item.isSaved ? Colors.red : Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            item.isSaved = true;
-                          });
-                        }),
-                  )
-                ]))));
-  }
-}
-
-// class RecipeListParentWidget extends StatelessWidget {
-//   final RecipeRepository repository;
-//   RecipeListParentWidget({Key key, @required this.repository})
-//       : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: "Recip List",
-//       home: BlocProvider<RecipeListBloc>(
-//         create: (context) => RecipeListBloc(repository: repository),
-//         child: RecipeListContainerWidget(),
-//       ),
-//     );
-//   }
-// }
 
 class RecipeListContainerWidget extends StatelessWidget {
   RecipeListBloc bloc;
