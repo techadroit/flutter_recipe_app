@@ -62,14 +62,8 @@ class BottomWidgetContainer extends StatelessWidget {
                 case 0:
                   return getRecipeWidget();
                   break;
-                case 2:
-                  return ScreenWidget(Colors.blue);
-                  break;
                 case 1:
                   return getVideoRecipeWidget();
-                  break;
-                case 3:
-                  return ScreenWidget(Colors.orange);
                   break;
               }
             }
@@ -121,23 +115,13 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
               icon: Icon(Icons.home),
               backgroundColor: Colors.blue,
               title: Text("Recipes")),
-//          BottomNavigationBarItem(
-//              icon: Icon(Icons.favorite_border),
-//              backgroundColor: Colors.blue,
-//              title: Text("Favourites")),
           BottomNavigationBarItem(
               icon: Icon(Icons.video_call),
               backgroundColor: Colors.blue,
               title: Text("Videos")),
-//          BottomNavigationBarItem(
-//              icon: Icon(Icons.settings),
-//              backgroundColor: Colors.blue,
-//              title: Text("Settings")),
         ]);
   }
 }
-
-
 
 Widget getRecipeWidget() {
   final RecipeRepository recipeRepository = RecipeRepository(
@@ -153,7 +137,6 @@ Widget getRecipeWidget() {
 }
 
 Widget getVideoRecipeWidget() {
-
   final RecipeRepository recipeRepository = RecipeRepository(
     dataSource: RemoteDataSource(NetworkHandler().dio),
   );
@@ -163,8 +146,7 @@ Widget getVideoRecipeWidget() {
 
   return BlocProvider(
     key: PageStorageKey("video"),
-    create: (BuildContext context) =>
-    bloc..add(SearchVideos()),
+    create: (BuildContext context) => bloc..add(SearchVideos()),
     child: VideoListWidgetStatefull(),
   );
 }
