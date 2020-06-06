@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/SearchBlocs.dart';
+import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
@@ -90,7 +91,7 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
 class SearchListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBlocs, SearchEvent>(
+    return BlocBuilder<SearchBlocs, RecipeEvent>(
         bloc: BlocProvider.of(context),
         builder: (context, state) {
           if (state is SearchEvent && state.list.length > 0) {

@@ -24,10 +24,6 @@ class RecipeDetailBloc extends Bloc<RecipeAction,RecipeEvent>{
     if(event is FetchRecipeDetail){
       var response = await fetchRecipeDetailUsecase(event.id);
       yield response.fold((l) => RecipeError(), (r) => RecipeDetailState(r));
-//      RecipeDetailResponse response =
-//      await remoteRespository.getRecipeDetail(event.id, RecipeDetailMapper());
-//       RecipeDetail recipeDetail = RecipeDetailMapper().mapTo(response);
-//      yield RecipeDetailState(recipeDetail);
     }
   }
 
