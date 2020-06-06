@@ -10,6 +10,7 @@ import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
+import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 
 class SearchItem {
   String keyword;
@@ -159,7 +160,8 @@ class RecipeListParentWidget extends StatelessWidget {
       dataSource: RemoteDataSource(NetworkHandler().dio),
     );
     var listbloc = RecipeListBloc(repository: recipeRepository);
-
+    listbloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
+    listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
     return BlocProvider(
         create: (BuildContext buildcontext) => listbloc,
         child: Container(

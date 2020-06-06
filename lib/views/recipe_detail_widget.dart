@@ -6,10 +6,12 @@ import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/blocs/recipe_detail.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
+import 'package:recipe_flutter/repository/mapper/DataMapper.dart';
 import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
+import 'package:recipe_flutter/usecase/recipe_detail_usecase.dart';
 
 import '../main.dart';
 
@@ -29,6 +31,8 @@ class RecipeDetailParentState extends State<RecipeDetailParentWidget> {
 
   RecipeDetailParentState(){
     bloc = RecipeDetailBloc(recipeRepository);
+    bloc.fetchRecipeDetailUsecase  =
+        FetchRecipeDetailUsecase(recipeRepository,RecipeDetailMapper());
   }
 
   @override

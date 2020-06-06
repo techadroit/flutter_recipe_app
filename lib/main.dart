@@ -6,6 +6,7 @@ import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
+import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 import 'package:recipe_flutter/views/ListWidget.dart';
 import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
@@ -143,6 +144,8 @@ Widget getRecipeWidget() {
     dataSource: RemoteDataSource(NetworkHandler().dio),
   );
   var listbloc = RecipeListBloc(repository: recipeRepository);
+  listbloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
+  listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
   return BlocProvider(
     create: (BuildContext context) => listbloc,
     child: RecipeListContainerWidget(),
@@ -154,10 +157,14 @@ Widget getVideoRecipeWidget() {
   final RecipeRepository recipeRepository = RecipeRepository(
     dataSource: RemoteDataSource(NetworkHandler().dio),
   );
+  var bloc = RecipeListBloc(repository: recipeRepository);
+  bloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
+  bloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
+
   return BlocProvider(
     key: PageStorageKey("video"),
     create: (BuildContext context) =>
-        RecipeListBloc(repository: recipeRepository)..add(SearchVideos()),
+    bloc..add(SearchVideos()),
     child: VideoListWidgetStatefull(),
   );
 }

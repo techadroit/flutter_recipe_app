@@ -4,8 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/SearchBlocs.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
-import 'package:http/http.dart' as http;
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/views/ListWidget.dart';
 
@@ -13,14 +11,14 @@ class SearchWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RecipeRepository recipeRepository = RecipeRepository(
-      dataSource: RemoteDataSource(NetworkHandler().dio),);
+      dataSource: RemoteDataSource(NetworkHandler().dio),
+    );
 
-    return 
-         Scaffold(
-            body: SafeArea(
-                child: BlocProvider<SearchBlocs>(
-                    create: (context) => SearchBlocs(recipeRepository),
-                    child: searchWidget())));
+    return Scaffold(
+        body: SafeArea(
+            child: BlocProvider<SearchBlocs>(
+                create: (context) => SearchBlocs(recipeRepository),
+                child: searchWidget())));
   }
 }
 
@@ -29,10 +27,7 @@ Widget searchWidget() {
       color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          SearchWidget(),
-          Expanded(child: SearchListWidget())
-        ],
+        children: <Widget>[SearchWidget(), Expanded(child: SearchListWidget())],
       ));
 }
 
@@ -42,10 +37,9 @@ class SearchWidget extends StatefulWidget {
 }
 
 class _SearchStateLessWidgetState extends State<SearchWidget> {
-  
   @override
   Widget build(BuildContext context) {
-    SearchBlocs bloc = BlocProvider.of(context);    
+    SearchBlocs bloc = BlocProvider.of(context);
     return Center(
         child: Wrap(children: [
       Container(
@@ -59,7 +53,7 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
           Icon(Icons.search),
           Expanded(
               child: TextField(
-                autofocus: true,
+                  autofocus: true,
                   onChanged: (text) {
                     bloc.add(SearchAction(text));
                   },
@@ -105,7 +99,7 @@ class SearchListWidget extends StatelessWidget {
                 itemCount: list.length,
                 itemBuilder: (context, position) {
                   var item = list[position];
-                  return getSearchItemWidget(context,item.title);
+                  return getSearchItemWidget(context, item.title);
                 });
           } else {
             return Container(
@@ -117,18 +111,22 @@ class SearchListWidget extends StatelessWidget {
   }
 }
 
-Widget getSearchItemWidget(BuildContext context,String title) {
+Widget getSearchItemWidget(BuildContext context, String title) {
   return GestureDetector(
-    onTap: (){
-      Navigator.popAndPushNamed(context, "/searchList",
-      arguments: SearchItem(keyword:title));
-    },
-    child : Container(
-    margin: EdgeInsets.symmetric(horizontal: 12),
-    padding: EdgeInsets.all(8),
-    alignment: Alignment.centerLeft,
-      child: Text(
-    title,
-    style: TextStyle(color: Colors.grey,fontSize: 18,fontFamily: 'RobotoMono-Medium'),
-  )));
+      onTap: () {
+        Navigator.popAndPushNamed(context, "/searchList",
+            arguments: SearchItem(keyword: title));
+      },
+      child: Container(
+          width: double.infinity,
+          margin: EdgeInsets.symmetric(horizontal: 12),
+          padding: EdgeInsets.all(8),
+          alignment: Alignment.centerLeft,
+          child: Text(
+            title,
+            style: TextStyle(
+                color: Colors.grey,
+                fontSize: 18,
+                fontFamily: 'RobotoMono-Medium'),
+          )));
 }
