@@ -17,6 +17,7 @@ class SearchItem {
 abstract class ListItem {}
 
 class RecipeItem extends ListItem {
+  String id;
   String heading;
   String serving;
   String cookingTime;
@@ -43,7 +44,7 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        Navigator.pushNamed(context,"/recipeDetail");
+        Navigator.pushNamed(context,"/recipeDetail",arguments: item.id);
         },
       child:Container(
         padding: EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -129,6 +130,7 @@ class RecipeListWidget extends StatelessWidget {
     RecipeListBloc bloc = BlocProvider.of(context);
     return BlocBuilder(
       bloc: bloc,
+      // ignore: missing_return
       builder: (context, state) {
         if (state is RecipeUninitialized) {
           bloc.add(SearchRecipes(keyword: searchItem.keyword));

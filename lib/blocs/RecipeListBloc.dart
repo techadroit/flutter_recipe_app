@@ -78,6 +78,7 @@ class RecipeListBloc extends Bloc<RecipeAction, RecipeEvent> {
     for (int i = 0; i < list.length; i++) {
       var result = list[i];
       var item = RecipeItem();
+      item.id = result.id.toString();
       item.imageUrl = response.baseUri + result.image;
       item.cookingTime = result.readyInMinutes.toString();
       item.serving = result.servings.toString();

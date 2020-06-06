@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/MainBloc.dart';
 import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
@@ -9,6 +10,7 @@ import 'package:recipe_flutter/views/ListWidget.dart';
 import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
+import 'package:recipe_flutter/views/youtube_widget.dart';
 
 import 'blocs/actions.dart';
 import 'blocs/events.dart';
@@ -20,9 +22,13 @@ final RecipeRepository recipeRepository = RecipeRepository(
  
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
- 
-
-  runApp(new MaterialApp(
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.blueAccent,
+    ),
+  );
+   runApp(new MaterialApp(
     title: "Widget",
     initialRoute: '/',
     routes: {
@@ -32,8 +38,8 @@ void main() {
           ),
       '/search': (context) => SearchWiget(),
       '/searchList':(context) => RecipeListParentWidget(),
-      '/recipeDetail':(context) => RecipeDetailParentWidget()
-      // '/youtube_video': (context) => YoutubeWidget()
+      '/recipeDetail':(context) => RecipeDetailParentWidget(),
+      '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
         fontFamily: 'Raleway',
@@ -49,6 +55,7 @@ class BottomWidgetContainer extends StatelessWidget {
         child: Scaffold(
       body: BlocBuilder<MainBloc, RecipeEvent>(
           bloc: BlocProvider.of(context),
+          // ignore: missing_return
           builder: (context, state) {
             if (state is BottomNavigationEvent) {
               var index = state.index;
@@ -56,10 +63,10 @@ class BottomWidgetContainer extends StatelessWidget {
                 case 0:
                   return getRecipeWidget();
                   break;
-                case 1:
+                case 2:
                   return ScreenWidget(Colors.blue);
                   break;
-                case 2:
+                case 1:
                   return getVideoRecipeWidget();
                   break;
                 case 3:
@@ -115,18 +122,18 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
               icon: Icon(Icons.home),
               backgroundColor: Colors.blue,
               title: Text("Recipes")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border),
-              backgroundColor: Colors.blue,
-              title: Text("Favourites")),
+//          BottomNavigationBarItem(
+//              icon: Icon(Icons.favorite_border),
+//              backgroundColor: Colors.blue,
+//              title: Text("Favourites")),
           BottomNavigationBarItem(
               icon: Icon(Icons.video_call),
               backgroundColor: Colors.blue,
               title: Text("Videos")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              backgroundColor: Colors.blue,
-              title: Text("Settings")),
+//          BottomNavigationBarItem(
+//              icon: Icon(Icons.settings),
+//              backgroundColor: Colors.blue,
+//              title: Text("Settings")),
         ]);
   }
 }

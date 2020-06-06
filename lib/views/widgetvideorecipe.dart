@@ -5,6 +5,7 @@ import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
 import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
+import 'package:recipe_flutter/views/youtube_widget.dart';
 
 class VideoRecipeItem {
   String title;
@@ -82,9 +83,9 @@ class VideoRecipeItemWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           GestureDetector(
-            onTap: () => {
-              // Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
-            },
+            onTap: () =>
+               Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
+            ,
             child: Image.network(
               item.thumbnailurl,
               height: 100,
@@ -112,9 +113,9 @@ class VideoRecipeItemWidgetV2 extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () => {
-              // Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
-            },
+            onTap: () =>
+               Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
+            ,
             child: Stack(
               alignment: Alignment.center,
               children:<Widget>[
@@ -127,7 +128,7 @@ class VideoRecipeItemWidgetV2 extends StatelessWidget {
                 ),           
                   GestureDetector(
                   onTap: (){
-                    // Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
+                     Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId));
                   },
                   child:IconButton(
                   iconSize: 64,

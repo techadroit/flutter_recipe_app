@@ -24,11 +24,12 @@ class RecipeDetailMapper extends DataMapper<RecipeDetail,RecipeDetailResponse>{
     recipeDetail.id = e.id;
     recipeDetail.score = e.spoonacularScore;
 
-    e.extendedIngredients.map((e) => 
-    recipeDetail.ingredientList.add(RecipeIngredients(e.originalName)));
+    e.extendedIngredients.forEach((element) {
+      recipeDetail.ingredientList.add(RecipeIngredients(element.originalName));
+    });
 
-    e.analyzedInstructions.map((e) =>
-    recipeDetail.instructions.add(RecipeInstruction(e.steps.first.step)));
+//    e.analyzedInstructions.map((a) =>
+//    recipeDetail.instructions.add(new RecipeInstruction(a.steps.first.step)));
 
     return recipeDetail;
   }
