@@ -4,7 +4,7 @@ A Simple recipe app build in flutter. This Repo demonstrate of how we can use Bl
 
 This repo is currently in development.
 
-![Recipe List] (https://raw.githubusercontent.com/techadroit/flutter_recipe_app/master/screenshot/recipe_list.jpg?raw=true "Recipe")
+![Recipe List] (https://raw.githubusercontent.com/techadroit/flutter_recipe_app/master/screenshot/recipe_list.jpg)
 
 ![Recipe Video] (https://raw.githubusercontent.com/techadroit/flutter_recipe_app/master/screenshot/recipe_list.jpg?raw=true)
 
