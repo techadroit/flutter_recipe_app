@@ -54,7 +54,10 @@ flutter:
       fonts:
         - asset: fonts/RobotoMono-Regular.ttf
         - asset: fonts/RobotoMono-Medium.ttf
-        - asset: fonts/RobotoMono-Bold.ttf          
+        - asset: fonts/RobotoMono-Bold.ttf
+    - family : RobotoThin
+      fonts:
+        - asset: fonts/Roboto-Thin.ttf
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

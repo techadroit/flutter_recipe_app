@@ -7,6 +7,7 @@ import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
+import 'package:recipe_flutter/views/error_screen.dart';
 import 'package:recipe_flutter/views/list_widget.dart';
 import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
@@ -23,24 +24,27 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
-      statusBarColor: Colors.blueAccent,
+      statusBarColor: Colors.black54,
     ),
   );
   NetworkHandler().init(baseUrl);
+  String initialRoute = RemoteDataSource.apikey.isEmpty ? "/error" : "/";
   runApp(new MaterialApp(
     title: "Widget",
-    initialRoute: '/',
+    initialRoute: initialRoute,
     routes: {
       '/': (context) => BlocProvider(
             create: (BuildContext context) => MainBloc(),
             child: BottomWidgetContainer(),
           ),
+      '/error': (context) => ErrorScreen(),
       '/search': (context) => SearchWiget(),
       '/searchList': (context) => RecipeListParentWidget(),
       '/recipeDetail': (context) => RecipeDetailParentWidget(),
       '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
+        primaryColor: Colors.black,
         fontFamily: 'Raleway',
         textTheme: TextTheme(
             headline: TextStyle(fontSize: 24, fontFamily: 'RobotMono'))),
@@ -75,9 +79,7 @@ class BottomWidgetContainer extends StatelessWidget {
 
 class ScreenWidget extends StatelessWidget {
   Color color;
-
   ScreenWidget(this.color);
-
   @override
   Widget build(BuildContext context) {
     return Container(color: color);
