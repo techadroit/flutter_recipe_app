@@ -3,18 +3,18 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
 
-import 'package:recipe_flutter/views/ListWidget.dart';
+import 'package:recipe_flutter/views/list_widget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 
-class BottomNavigationEvent extends RecipeEvent {
+class BottomNavigationState extends RecipeState {
   int index = 0;
-  BottomNavigationEvent(this.index);
+  BottomNavigationState(this.index);
 
   @override
   List<Object> get props => [index];
 }
 
-class RecipeDetailState extends RecipeEvent{
+class RecipeDetailState extends RecipeState{
   RecipeDetail recipeDetail;
   RecipeDetailState(this.recipeDetail);
 
@@ -22,8 +22,8 @@ class RecipeDetailState extends RecipeEvent{
   List<Object> get props => [recipeDetail];
 }
 
-abstract class RecipeEvent extends Equatable {
-  RecipeEvent();
+abstract class RecipeState extends Equatable {
+  RecipeState();
 
   @override
   List<Object> get props => [];
@@ -34,14 +34,14 @@ abstract class RecipeEvent extends Equatable {
   }
 }
 
-class RecipeLoaded extends RecipeEvent {
+class RecipeLoaded extends RecipeState {
   List<RecipeItem> results = List();
   RecipeLoaded(this.results);
   @override
   List<Object> get props => results;
 }
 
-class VideoRecipeLoaded extends RecipeEvent{
+class VideoRecipeLoaded extends RecipeState{
   List<VideoRecipeItem> list = List();
   VideoRecipeLoaded(this.list);
 
@@ -50,11 +50,11 @@ class VideoRecipeLoaded extends RecipeEvent{
   
 }
 
-class RecipeUninitialized extends RecipeEvent {}
+class RecipeUninitialized extends RecipeState {}
 
-class RecipeError extends RecipeEvent {}
+class RecipeError extends RecipeState {}
 
-class RecipeLoad extends RecipeEvent {
+class RecipeLoad extends RecipeState {
   bool isLoading = false;
   RecipeLoad({@required this.isLoading});
   @override

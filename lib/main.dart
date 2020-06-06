@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/MainBloc.dart';
-import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
+import 'package:recipe_flutter/blocs/recipe_event_bloc.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
-import 'package:recipe_flutter/views/ListWidget.dart';
+import 'package:recipe_flutter/views/list_widget.dart';
 import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
@@ -52,11 +52,11 @@ class BottomWidgetContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: BlocBuilder<MainBloc, RecipeEvent>(
+      body: BlocBuilder<MainBloc, RecipeState>(
           bloc: BlocProvider.of(context),
           // ignore: missing_return
           builder: (context, state) {
-            if (state is BottomNavigationEvent) {
+            if (state is BottomNavigationState) {
               var index = state.index;
               switch (index) {
                 case 0:
@@ -106,7 +106,7 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
             currentIndex = index;
           });
 
-          bloc.add(BottomNavigationAction(index));
+          bloc.add(BottomNavigationEvent(index));
         },
         currentIndex: currentIndex,
         backgroundColor: Colors.white,

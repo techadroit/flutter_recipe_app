@@ -5,7 +5,7 @@ import 'package:recipe_flutter/api_response/SearchReicpeResponse.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/core/usecase/usecase.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/views/ListWidget.dart';
+import 'package:recipe_flutter/views/list_widget.dart';
 import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 
 class SearchRecipeUsecase extends EitherUseCase<List<RecipeItem>,Param>{

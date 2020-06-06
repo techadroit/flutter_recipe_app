@@ -5,39 +5,39 @@ import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/usecase/autocomplete_usecase.dart';
 
-class SearchBlocs extends Bloc<SearchAction, RecipeEvent> {
+class SearchBlocs extends Bloc<SearchEvent, RecipeState> {
   RecipeRepository recipeRepository;
   AutocompleteUsecase usecase;
 
   SearchBlocs(this.recipeRepository);
 
   @override
-  SearchEvent get initialState => new SearchEvent(List<AutoCompleteResponse>());
+  SearchState get initialState => new SearchState(List<AutoCompleteResponse>());
 
   @override
-  Stream<RecipeEvent> mapEventToState(SearchAction event) async* {
+  Stream<RecipeState> mapEventToState(SearchEvent event) async* {
     var response = await usecase(event.keyword);
-    yield response.fold((l) => SearchError(), (r) => SearchEvent(r));
+    yield response.fold((l) => SearchError(), (r) => SearchState(r));
   }
 }
 
-class SearchAction extends RecipeAction {
+class SearchEvent extends RecipeEvent {
   String keyword;
 
-  SearchAction(this.keyword);
+  SearchEvent(this.keyword);
 }
 
-class SearchError extends RecipeEvent {
+class SearchError extends RecipeState {
   SearchError();
 
   @override
   List<Object> get props => super.props;
 }
 
-class SearchEvent extends RecipeEvent {
+class SearchState extends RecipeState {
   final List<AutoCompleteResponse> list;
 
-  SearchEvent(this.list);
+  SearchState(this.list);
 
   @override
   List<Object> get props => list;

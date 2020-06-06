@@ -7,7 +7,7 @@ import 'package:recipe_flutter/views/widgetvideorecipe.dart';
 import 'actions.dart';
 import 'events.dart';
 
-class RecipeListBloc extends Bloc<RecipeAction, RecipeEvent> {
+class RecipeListBloc extends Bloc<RecipeEvent, RecipeState> {
   final RecipeRepository repository;
   int offset = 0;
   SearchRecipeUsecase recipeUsecase;
@@ -16,10 +16,10 @@ class RecipeListBloc extends Bloc<RecipeAction, RecipeEvent> {
   RecipeListBloc({@required this.repository});
 
   @override
-  RecipeEvent get initialState => RecipeUninitialized();
+  RecipeState get initialState => RecipeUninitialized();
 
   @override
-  Stream<RecipeEvent> mapEventToState(RecipeAction event) async* {
+  Stream<RecipeState> mapEventToState(RecipeEvent event) async* {
     if (event is SearchRecipes) {
       yield RecipeLoad(isLoading: true);
       try {
@@ -30,12 +30,12 @@ class RecipeListBloc extends Bloc<RecipeAction, RecipeEvent> {
       }
     } else if (event is SearchVideos) {
       yield* loadVideo();
-    } else if (event is BottomNavigationAction) {
-      yield BottomNavigationEvent(event.index);
+    } else if (event is BottomNavigationEvent) {
+      yield BottomNavigationState(event.index);
     }
   }
 
-  Stream<RecipeEvent> loadVideo() async* {
+  Stream<RecipeState> loadVideo() async* {
     final currentState = state;
     if (currentState is! VideoRecipeLoaded) yield RecipeLoad(isLoading: true);
     var response = await videoRecipeUsecase(Param("chicken", offset));

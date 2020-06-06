@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_flutter/blocs/SearchBlocs.dart';
+import 'package:recipe_flutter/blocs/search_blocs.dart';
 import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
-import 'package:recipe_flutter/views/ListWidget.dart';
+import 'package:recipe_flutter/usecase/autocomplete_usecase.dart';
+import 'package:recipe_flutter/views/list_widget.dart';
 
 class SearchWiget extends StatelessWidget {
   @override
@@ -14,11 +15,12 @@ class SearchWiget extends StatelessWidget {
     final RecipeRepository recipeRepository = RecipeRepository(
       dataSource: RemoteDataSource(NetworkHandler().dio),
     );
-
+    SearchBlocs blocs = SearchBlocs(recipeRepository);
+    blocs.usecase = AutocompleteUsecase(recipeRepository);
     return Scaffold(
         body: SafeArea(
             child: BlocProvider<SearchBlocs>(
-                create: (context) => SearchBlocs(recipeRepository),
+                create: (context) => blocs,
                 child: searchWidget())));
   }
 }
@@ -56,7 +58,7 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
               child: TextField(
                   autofocus: true,
                   onChanged: (text) {
-                    bloc.add(SearchAction(text));
+                    bloc.add(SearchEvent(text));
                   },
                   decoration: InputDecoration(hintText: 'Search')))
         ]),
@@ -68,10 +70,10 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
 class SearchListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBlocs, RecipeEvent>(
+    return BlocBuilder<SearchBlocs, RecipeState>(
         bloc: BlocProvider.of(context),
         builder: (context, state) {
-          if (state is SearchEvent && state.list.length > 0) {
+          if (state is SearchState && state.list.length > 0) {
             var list = state.list;
             return ListView.builder(
                 itemCount: list.length,

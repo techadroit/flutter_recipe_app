@@ -8,7 +8,7 @@ import 'package:recipe_flutter/repository/mapper/DataMapper.dart';
 import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
 import 'package:recipe_flutter/usecase/recipe_detail_usecase.dart';
 
-class RecipeDetailBloc extends Bloc<RecipeAction,RecipeEvent>{
+class RecipeDetailBloc extends Bloc<RecipeEvent,RecipeState>{
 
   RecipeRepository remoteRespository;
   FetchRecipeDetailUsecase fetchRecipeDetailUsecase;
@@ -16,10 +16,10 @@ class RecipeDetailBloc extends Bloc<RecipeAction,RecipeEvent>{
   RecipeDetailBloc(this.remoteRespository);
 
   @override
-  RecipeEvent get initialState => RecipeUninitialized();
+  RecipeState get initialState => RecipeUninitialized();
 
   @override
-  Stream<RecipeEvent> mapEventToState(RecipeAction event) async*{
+  Stream<RecipeState> mapEventToState(RecipeEvent event) async*{
     yield RecipeLoad(isLoading: true);
     if(event is FetchRecipeDetail){
       var response = await fetchRecipeDetailUsecase(event.id);

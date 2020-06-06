@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'actions.dart';
 import 'events.dart';
 
-class MainBloc extends Bloc<RecipeAction,RecipeEvent>{
+class MainBloc extends Bloc<RecipeEvent,RecipeState>{
   @override
-  RecipeEvent get initialState => BottomNavigationEvent(0);
+  RecipeState get initialState => BottomNavigationState(0);
 
   @override
-  Stream<RecipeEvent> mapEventToState(RecipeAction event) async* {
-    if(event is BottomNavigationAction){
-      yield BottomNavigationEvent(event.index);
+  Stream<RecipeState> mapEventToState(RecipeEvent event) async* {
+    if(event is BottomNavigationEvent){
+      yield BottomNavigationState(event.index);
     }
   }
 
