@@ -2,16 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/SearchBlocs.dart';
+import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:http/http.dart' as http;
+import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/views/ListWidget.dart';
 
 class SearchWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RecipeRepository recipeRepository = RecipeRepository(
-        recipeApiClient: RecipeApiClient(httpClient: http.Client()));
+      dataSource: RemoteDataSource(NetworkHandler().dio),);
 
     return 
          Scaffold(

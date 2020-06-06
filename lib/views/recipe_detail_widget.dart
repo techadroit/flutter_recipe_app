@@ -4,7 +4,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/blocs/recipe_detail.dart';
+import 'package:recipe_flutter/core/network/network_handler.dart';
+import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
+import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 
@@ -18,7 +21,15 @@ class RecipeDetailParentWidget extends StatefulWidget {
 }
 
 class RecipeDetailParentState extends State<RecipeDetailParentWidget> {
-  RecipeDetailBloc bloc = RecipeDetailBloc(recipeRepository);
+
+  final RecipeRepository recipeRepository = RecipeRepository(
+    dataSource: RemoteDataSource(NetworkHandler().dio),
+  );
+  RecipeDetailBloc bloc;
+
+  RecipeDetailParentState(){
+    bloc = RecipeDetailBloc(recipeRepository);
+  }
 
   @override
   void initState() {

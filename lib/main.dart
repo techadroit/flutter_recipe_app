@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/MainBloc.dart';
 import 'package:recipe_flutter/blocs/RecipeListBloc.dart';
+import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
-import 'package:http/http.dart' as http;
+import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/views/ListWidget.dart';
 import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
@@ -14,12 +14,9 @@ import 'package:recipe_flutter/views/youtube_widget.dart';
 
 import 'blocs/actions.dart';
 import 'blocs/events.dart';
-final RecipeRepository recipeRepository = RecipeRepository(
-    recipeApiClient: RecipeApiClient(
-      httpClient: http.Client(),
-    ),
-  );
- 
+
+const baseUrl = 'https://api.spoonacular.com';
+
 void main() {
   BlocSupervisor.delegate = SimpleBlocDelegate();
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +25,8 @@ void main() {
       statusBarColor: Colors.blueAccent,
     ),
   );
-   runApp(new MaterialApp(
+  NetworkHandler().init(baseUrl);
+  runApp(new MaterialApp(
     title: "Widget",
     initialRoute: '/',
     routes: {
@@ -37,8 +35,8 @@ void main() {
             child: BottomWidgetContainer(),
           ),
       '/search': (context) => SearchWiget(),
-      '/searchList':(context) => RecipeListParentWidget(),
-      '/recipeDetail':(context) => RecipeDetailParentWidget(),
+      '/searchList': (context) => RecipeListParentWidget(),
+      '/recipeDetail': (context) => RecipeDetailParentWidget(),
       '/youtube_video': (context) => YoutubeWidget()
     },
     theme: ThemeData(
@@ -137,10 +135,14 @@ class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
         ]);
   }
 }
- var listbloc = RecipeListBloc(repository: recipeRepository);
+
+
 
 Widget getRecipeWidget() {
-  
+  final RecipeRepository recipeRepository = RecipeRepository(
+    dataSource: RemoteDataSource(NetworkHandler().dio),
+  );
+  var listbloc = RecipeListBloc(repository: recipeRepository);
   return BlocProvider(
     create: (BuildContext context) => listbloc,
     child: RecipeListContainerWidget(),
@@ -148,6 +150,10 @@ Widget getRecipeWidget() {
 }
 
 Widget getVideoRecipeWidget() {
+
+  final RecipeRepository recipeRepository = RecipeRepository(
+    dataSource: RemoteDataSource(NetworkHandler().dio),
+  );
   return BlocProvider(
     key: PageStorageKey("video"),
     create: (BuildContext context) =>
@@ -165,6 +171,6 @@ var searchView = Center(
         color: Colors.white,
         border: Border.all(width: 1.0, color: Colors.grey),
         borderRadius: BorderRadius.all(Radius.circular(12.0))),
-    child: Row(children: [Icon(Icons.search),Expanded(child:Text('Search'))]),
+    child: Row(children: [Icon(Icons.search), Expanded(child: Text('Search'))]),
   )
 ]));

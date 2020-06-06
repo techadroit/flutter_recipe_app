@@ -12,9 +12,7 @@ class RecipeApiClient {
   static const apikey = '95aed809c8d84dd6b831b9aaa35c5f24';
   final http.Client httpClient;
 
-  RecipeApiClient({@required this.httpClient}){
-    
-  }
+  RecipeApiClient({@required this.httpClient});
 
   Future<SearchRecipeResponse> getSearchApi(
       String query, int offset, String number) async {
