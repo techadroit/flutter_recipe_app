@@ -65,29 +65,6 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
   }
 }
 
-// Widget searchView(SearchBlocs bloc) {
-//   return Center(
-//       child: Wrap(children: [
-//     Container(
-//       margin: EdgeInsets.all(8),
-//       padding: EdgeInsets.all(8),
-//       decoration: BoxDecoration(
-//           color: Colors.white,
-//           border: Border.all(width: 1.0, color: Colors.grey),
-//           borderRadius: BorderRadius.all(Radius.circular(12.0))),
-//       child: Row(children: [
-//         Icon(Icons.search),
-//         Expanded(
-//             child: TextField(
-//                 onChanged: (text) {
-//                   bloc.add(SearchAction(text));
-//                 },
-//                 decoration: InputDecoration(hintText: 'Search')))
-//       ]),
-//     )
-//   ]));
-// }
-
 class SearchListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
