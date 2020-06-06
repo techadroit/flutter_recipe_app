@@ -1,10 +1,12 @@
 # recipe_flutter
 
-A Simple recipe app build in flutter. This Repo demonstrate of how we can use Bloc (https://bloclibrary.dev/#/) for state management in flutter.
+A Simple recipe app build in flutter. This Repo demonstrate how we can use Bloc (https://bloclibrary.dev/#/) for state management in flutter.
 
 This repo is currently in development.
 
-![recipe_list](https://user-images.githubusercontent.com/4759634/83948783-63429200-a83d-11ea-9e2b-ffaccfd0b888.jpg)
+## Requirements
+
+Create api key from https://spoonacular.com/ and assign it to apikey variable in the RemoteDataSource class.
 
 ## Getting Started
 
