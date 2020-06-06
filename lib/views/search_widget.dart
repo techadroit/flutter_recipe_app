@@ -118,7 +118,7 @@ class SearchListWidget extends StatelessWidget {
 Widget getSearchItemWidget(BuildContext context,String title) {
   return GestureDetector(
     onTap: (){
-      Navigator.pushNamed(context, "/searchList",
+      Navigator.popAndPushNamed(context, "/searchList",
       arguments: SearchItem(keyword:title));
     },
     child : Container(
