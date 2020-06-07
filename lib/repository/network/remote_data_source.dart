@@ -7,7 +7,7 @@ import 'package:recipe_flutter/api_response/SearchReicpeResponse.dart';
 import 'package:recipe_flutter/core/error/exceptions.dart';
 
 class RemoteDataSource {
-  static const apikey = '';
+  static const apikey = '95aed809c8d84dd6b831b9aaa35c5f24';
   Dio dio;
 
   RemoteDataSource(this.dio);

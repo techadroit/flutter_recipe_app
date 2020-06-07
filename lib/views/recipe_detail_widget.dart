@@ -110,8 +110,9 @@ Widget getDetailBody(RecipeDetail recipeDetail) {
           )),
       Padding(
           padding:insets,
-          child: Html(data: recipeDetail.description,
-          )),
+//          child: Html(data: recipeDetail.description),
+            child:Text(recipeDetail.description)
+          ),
 //      getIngredients(recipeDetail.ingredientList)
     ],
   );

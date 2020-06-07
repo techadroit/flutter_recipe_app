@@ -1,8 +1,5 @@
-import 'dart:ffi';
-
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-
 import '../error/failures.dart';
 
 abstract class Usecase{}
@@ -16,7 +13,7 @@ abstract class ResultUsecase<Type,Params> extends Usecase{
 }
 
 abstract class CompletableUsecase<Params> extends Usecase{
-  Future<Void> call(Params params);
+  Future<Empty> call(Params params);
 }
 
 /// represent no parameter supply to usecases
