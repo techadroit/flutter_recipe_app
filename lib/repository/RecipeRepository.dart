@@ -1,14 +1,15 @@
 import 'package:flutter/cupertino.dart';
-import 'package:recipe_flutter/api_response/AutoCompleteResponse.dart';
-import 'package:recipe_flutter/api_response/RecipeDetailResponse.dart';
-import 'package:recipe_flutter/api_response/SearchReicpeResponse.dart';
+import 'package:recipe_flutter/api_response/auto_complete_response.dart';
+import 'package:recipe_flutter/api_response/recipe_detail_response.dart';
+import 'package:recipe_flutter/api_response/search_recipe_response.dart';
+import 'package:recipe_flutter/api_response/search_video_recipes_response.dart';
 import 'package:recipe_flutter/repository/mapper/DataMapper.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 
 class RecipeRepository {
-  RemoteDataSource dataSource;
+  late RemoteDataSource dataSource;
 
-  RecipeRepository({@required this.dataSource});
+  RecipeRepository(this.dataSource);
 
   Future<SearchRecipeResponse> searchRecipeFor(String query, int offset) async {
     return dataSource.getRecipes(query, offset, "10");
@@ -18,7 +19,7 @@ class RecipeRepository {
     return dataSource.autoComplete(query, 10);
   }
 
-  Future<RecipeDetailResponse> getRecipeDetail(String id, DataMapper mapper) {
+  Future<RecipeDetailResponse>? getRecipeDetail(String id, DataMapper mapper) {
     try {
       var response = dataSource.getRecipeDetailForId(id);
       // if(mapper != null)
@@ -35,7 +36,7 @@ class RecipeRepository {
     return response;
   }
 
-  Future<VideoListResponse> loadVidoeRecipes(String query, int offset) async {
+  Future<SearchVideoRecipesResponse> loadVidoeRecipes(String query, int offset) async {
     return dataSource.loadVideoFor(query, offset, "10");
   }
 }

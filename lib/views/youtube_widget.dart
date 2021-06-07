@@ -9,8 +9,8 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
    Widget build(BuildContext context) {
      final YoutubeArgument args = ModalRoute
          .of(context)
-         .settings
-         .arguments;
+         ?.settings
+         .arguments as YoutubeArgument;
      return Scaffold(
        body: SafeArea(
          child: Center(child:

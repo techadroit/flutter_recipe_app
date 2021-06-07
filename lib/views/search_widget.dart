@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_flutter/blocs/search_blocs.dart';
-import 'package:recipe_flutter/blocs/events.dart';
+import 'package:recipe_flutter/blocs/recipe_search/search_recipe_bloc.dart';
+import 'package:recipe_flutter/blocs/recipe_search/search_recipe_events.dart';
+import 'package:recipe_flutter/blocs/recipe_search/search_recipe_state.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
@@ -13,15 +14,14 @@ class SearchWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final RecipeRepository recipeRepository = RecipeRepository(
-      dataSource: RemoteDataSource(NetworkHandler().dio),
+      RemoteDataSource(NetworkHandler().dio),
     );
     SearchBlocs blocs = SearchBlocs(recipeRepository);
     blocs.usecase = AutocompleteUsecase(recipeRepository);
     return Scaffold(
         body: SafeArea(
             child: BlocProvider<SearchBlocs>(
-                create: (context) => blocs,
-                child: searchWidget())));
+                create: (context) => blocs, child: searchWidget())));
   }
 }
 
@@ -70,16 +70,16 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
 class SearchListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchBlocs, RecipeState>(
+    return BlocBuilder<SearchBlocs, SearchRecipeState>(
         bloc: BlocProvider.of(context),
         builder: (context, state) {
-          if (state is SearchState && state.list.length > 0) {
+          if (state is SearchCompleteState && state.list.length > 0) {
             var list = state.list;
             return ListView.builder(
                 itemCount: list.length,
                 itemBuilder: (context, position) {
                   var item = list[position];
-                  return getSearchItemWidget(context, item.title);
+                  return getSearchItemWidget(context, item.title!);
                 });
           } else {
             return Container(

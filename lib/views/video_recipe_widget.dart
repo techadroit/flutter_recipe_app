@@ -2,8 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_event_bloc.dart';
-import 'package:recipe_flutter/blocs/actions.dart';
 import 'package:recipe_flutter/blocs/events.dart';
+import 'package:recipe_flutter/blocs/state.dart';
+import 'package:recipe_flutter/blocs/video_recipes/recipe_video_bloc.dart';
+import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
+import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/views/youtube_widget.dart';
 
@@ -11,6 +14,7 @@ class VideoRecipeItem {
   String title;
   String thumbnailurl;
   String youtubeId;
+  VideoRecipeItem(this.title,this.thumbnailurl,this.youtubeId);
 }
 
 class VideoListWidgetStatefull extends StatefulWidget {
@@ -21,7 +25,7 @@ class VideoListWidgetStatefull extends StatefulWidget {
 }
 
 class VideoRecipeListWidget extends State<VideoListWidgetStatefull> {
-  RecipeListBloc bloc;
+  late VideoRecipeBloc bloc;
   final _scrollController = ScrollController();
 
   @override

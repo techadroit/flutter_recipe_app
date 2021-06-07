@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
-import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:recipe_flutter/blocs/main/either.dart';
 
 import '../error/failures.dart';
 

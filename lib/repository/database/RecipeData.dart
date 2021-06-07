@@ -1,9 +1,9 @@
 import 'package:recipe_flutter/repository/database/RecipeDatabase.dart';
 
 class RecipeData {
-  int id;
-  String title;
-  String body;
+  late int id;
+  late String title;
+  late String body;
 
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{

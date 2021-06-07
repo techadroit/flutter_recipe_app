@@ -4,16 +4,16 @@ class RecipeDetail {
   bool dairyFree = false;
   int readInMinute = 0;
   int servings = 0;
-  String sourceName;
-  String sourceLink;
-  String imageUrl;
-  String description;
-  String title;
-  int id;
-  double score;
+  late String sourceName;
+  late String sourceLink;
+  late String imageUrl;
+  late String description;
+  late String title;
+  late int id;
+  late double score;
 
-  List<RecipeIngredients> ingredientList = new List<RecipeIngredients>();
-  List<RecipeInstruction> instructions = new List<RecipeInstruction>();
+  List<RecipeIngredients> ingredientList = <RecipeIngredients>[];
+  List<RecipeInstruction> instructions = <RecipeInstruction>[];
 }
 
 class RecipeIngredients {

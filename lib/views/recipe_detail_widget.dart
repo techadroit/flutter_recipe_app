@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:recipe_flutter/blocs/actions.dart';
-import 'package:recipe_flutter/blocs/events.dart';
-import 'package:recipe_flutter/blocs/recipe_detail.dart';
+import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail.dart';
+import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_event.dart';
+import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_state.dart';
+import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/mapper/DataMapper.dart';
@@ -12,8 +13,6 @@ import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/usecase/recipe_detail_usecase.dart';
-
-import '../main.dart';
 
 class RecipeDetailParentWidget extends StatefulWidget {
   @override
@@ -25,9 +24,9 @@ class RecipeDetailParentWidget extends StatefulWidget {
 class RecipeDetailParentState extends State<RecipeDetailParentWidget> {
 
   final RecipeRepository recipeRepository = RecipeRepository(
-    dataSource: RemoteDataSource(NetworkHandler().dio),
+   RemoteDataSource(NetworkHandler().dio),
   );
-  RecipeDetailBloc bloc;
+  late RecipeDetailBloc bloc;
 
   RecipeDetailParentState(){
     bloc = RecipeDetailBloc(recipeRepository);
@@ -36,15 +35,9 @@ class RecipeDetailParentState extends State<RecipeDetailParentWidget> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    String id = ModalRoute.of(context).settings.arguments;
-    bloc.add(FetchRecipeDetail(id: id));
+    String id = ModalRoute.of(context)?.settings.arguments as String;
+    bloc.add(FetchRecipeDetail(id));
     return BlocProvider(
         create: (BuildContext context) => bloc,
         child: Scaffold(
@@ -61,20 +54,21 @@ class RecipeDetailWidget extends StatelessWidget {
         bloc: bloc,
         // ignore: missing_return
         builder: (context, state) {
-          if (state is RecipeUninitialized || state is RecipeLoad) {
+          if (state is RecipeInitialState || state is RecipeDetailLoading) {
             return Center(child: CircularProgressIndicator());
-          } else if (state is RecipeDetailState) {
+          } else if (state is RecipeDetailLoaded) {
             return getDetailBody(state.recipeDetail);
+          }else{
+            return Container();
           }
         });
   }
 }
 
-var insets = EdgeInsets.only(left: 12, right: 12, top: 12);
-
 Widget getDetailBody(RecipeDetail recipeDetail) {
+
+  var insets = EdgeInsets.only(left: 12, right: 12, top: 12);
   return ListView(
-//    crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
       Image.network(
         recipeDetail.imageUrl,

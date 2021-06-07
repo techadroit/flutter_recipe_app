@@ -8,19 +8,14 @@ class LocalRepository {
   }
 
   Future<void> addToFavourite(RecipeData data) async {
-    // return await getDatabase().then((value) => value.rawInsert(
-    //     'INSERT INTO Recipe(recipe_id, recipe_title, recipe_body) VALUES(?, ?, ?)',
-    //     [data.id, data.title, data.body]));
-
     return await getDatabase().then((database) => database.insert(RECIPE_TABLE, data.toMap()));
   }
 
-  Future<List<RecipeData>> getAllRecipes() async{
-    // return await getDatabase().then((value) => 
-    // value.query(RECIPE_TABLE);
-    Database database = await getDatabase();
-    List<Map> result = await database.query(RECIPE_TABLE);    
-  }
+  // Future<List<RecipeData>> getAllRecipes() async{
+  //   Database database = await getDatabase();
+  //   List<Map> result = await database.query(RECIPE_TABLE);
+  //   return result;
+  // }
 
   Future<int> delete(int id) async {
     Database database = await getDatabase();

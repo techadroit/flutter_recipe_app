@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_flutter/blocs/MainBloc.dart';
-import 'package:recipe_flutter/blocs/recipe_event_bloc.dart';
+import 'package:recipe_flutter/blocs/main/GlobalBlocObserver.dart';
+import 'package:recipe_flutter/blocs/recipe_list/recipe_list_bloc.dart';
+import 'package:recipe_flutter/blocs/video_recipes/recipe_video_bloc.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
@@ -11,16 +12,15 @@ import 'package:recipe_flutter/views/error_screen.dart';
 import 'package:recipe_flutter/views/list_widget.dart';
 import 'package:recipe_flutter/views/recipe_detail_widget.dart';
 import 'package:recipe_flutter/views/search_widget.dart';
-import 'package:recipe_flutter/views/widgetvideorecipe.dart';
+import 'package:recipe_flutter/views/video_recipe_widget.dart';
 import 'package:recipe_flutter/views/youtube_widget.dart';
 
-import 'blocs/actions.dart';
-import 'blocs/events.dart';
+import 'blocs/video_recipes/recipe_video_events.dart';
 
 const baseUrl = 'https://api.spoonacular.com';
 
 void main() {
-  BlocSupervisor.delegate = SimpleBlocDelegate();
+  Bloc.observer = GlobalBlocObserver();
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
@@ -33,10 +33,7 @@ void main() {
     title: "Widget",
     initialRoute: initialRoute,
     routes: {
-      '/': (context) => BlocProvider(
-            create: (BuildContext context) => MainBloc(),
-            child: BottomWidgetContainer(),
-          ),
+      '/': (context) => BottomWidgetContainer(),
       '/error': (context) => ErrorScreen(),
       '/search': (context) => SearchWiget(),
       '/searchList': (context) => RecipeListParentWidget(),
@@ -51,86 +48,60 @@ void main() {
   ));
 }
 
-class BottomWidgetContainer extends StatelessWidget {
+class BottomWidgetContainer extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return BottomWidgetState();
+  }
+}
+
+class BottomWidgetState extends State<BottomWidgetContainer> {
+  final list = [getRecipeWidget(), getVideoRecipeWidget()];
+  int currentIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-      body: BlocBuilder<MainBloc, RecipeState>(
-          bloc: BlocProvider.of(context),
-          // ignore: missing_return
-          builder: (context, state) {
-            if (state is BottomNavigationState) {
-              var index = state.index;
-              switch (index) {
-                case 0:
-                  return getRecipeWidget();
-                  break;
-                case 1:
-                  return getVideoRecipeWidget();
-                  break;
-              }
-            }
-          }),
-      bottomNavigationBar: BottomNavigationWidgetStateFull(),
+      body: list[currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+          onTap: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+          currentIndex: currentIndex,
+          backgroundColor: Colors.white,
+          items: [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                backgroundColor: Colors.blue,
+                title: Text("Recipes")),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.video_call),
+                backgroundColor: Colors.blue,
+                title: Text("Videos")),
+          ]),
     ));
   }
 }
 
 class ScreenWidget extends StatelessWidget {
   Color color;
+
   ScreenWidget(this.color);
+
   @override
   Widget build(BuildContext context) {
     return Container(color: color);
   }
 }
 
-class BottomNavigationWidgetStateFull extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return BottomNavigationWidget();
-  }
-}
-
-class BottomNavigationWidget extends State<BottomNavigationWidgetStateFull> {
-  var currentIndex = 0;
-  MainBloc bloc;
-
-  BottomNavigationWidget();
-
-  @override
-  Widget build(BuildContext context) {
-    bloc = BlocProvider.of(context);
-    return BottomNavigationBar(
-        onTap: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-
-          bloc.add(BottomNavigationEvent(index));
-        },
-        currentIndex: currentIndex,
-        backgroundColor: Colors.white,
-        items: [
-          BottomNavigationBarItem(
-              icon: Icon(Icons.home),
-              backgroundColor: Colors.blue,
-              title: Text("Recipes")),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.video_call),
-              backgroundColor: Colors.blue,
-              title: Text("Videos")),
-        ]);
-  }
-}
-
 Widget getRecipeWidget() {
   final RecipeRepository recipeRepository = RecipeRepository(
-    dataSource: RemoteDataSource(NetworkHandler().dio),
+    RemoteDataSource(NetworkHandler().dio),
   );
-  var listbloc = RecipeListBloc(repository: recipeRepository);
-  listbloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
+  final listbloc = RecipeListBloc(recipeRepository);
   listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
   return BlocProvider(
     create: (BuildContext context) => listbloc,
@@ -140,11 +111,10 @@ Widget getRecipeWidget() {
 
 Widget getVideoRecipeWidget() {
   final RecipeRepository recipeRepository = RecipeRepository(
-    dataSource: RemoteDataSource(NetworkHandler().dio),
+    RemoteDataSource(NetworkHandler().dio),
   );
-  var bloc = RecipeListBloc(repository: recipeRepository);
+  var bloc = VideoRecipeBloc(recipeRepository);
   bloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
-  bloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
 
   return BlocProvider(
     key: PageStorageKey("video"),
