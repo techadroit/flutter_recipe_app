@@ -3,7 +3,7 @@ import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
-import 'package:recipe_flutter/views/video_recipe_widget.dart';
+import 'package:recipe_flutter/views/modal/list_item.dart';
 
 
 class VideoRecipeBloc extends BaseBloc<RecipeVideoEvent, RecipeVideoState> {

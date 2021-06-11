@@ -4,31 +4,15 @@ import 'package:recipe_flutter/blocs/recipe_list/recipe_events.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_list_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
-import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 
-class SearchItem {
-  String keyword;
+import 'modal/list_item.dart';
+import 'modal/search_item.dart';
 
-  SearchItem({this.keyword = "chicken"});
-}
 
-abstract class ListItem {}
-
-class RecipeItem extends ListItem {
-  String id;
-  String heading;
-  String serving;
-  String cookingTime;
-  String imageUrl;
-  bool isSaved = false;
-
-  RecipeItem(this.id, this.heading, this.serving, this.cookingTime,
-      this.imageUrl, this.isSaved);
-}
 
 class RecipeListItemStateFullWidget extends StatefulWidget {
   RecipeItem item;
@@ -106,6 +90,19 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
 }
 
 class RecipeListContainerWidget extends StatelessWidget {
+
+  static Widget get(){
+    final RecipeRepository recipeRepository = RecipeRepository(
+      RemoteDataSource(NetworkHandler().dio),
+    );
+    final listbloc = RecipeListBloc(recipeRepository);
+    listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
+    return BlocProvider(
+      create: (BuildContext context) => listbloc,
+      child: RecipeListContainerWidget(),
+    );
+  }
+
   late RecipeListBloc bloc;
 
   RecipeListContainerWidget();
@@ -156,7 +153,7 @@ class RecipeListWidget extends StatelessWidget {
   }
 }
 
-class RecipeListParentWidget extends StatelessWidget {
+class RecipeAutoCompleteListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final SearchItem searchItem =
@@ -174,3 +171,16 @@ class RecipeListParentWidget extends StatelessWidget {
         ));
   }
 }
+
+var searchView = Center(
+    child: Wrap(children: [
+      Container(
+        margin: EdgeInsets.all(8),
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(width: 1.0, color: Colors.grey),
+            borderRadius: BorderRadius.all(Radius.circular(12.0))),
+        child: Row(children: [Icon(Icons.search), Expanded(child: Text('Search'))]),
+      )
+    ]));

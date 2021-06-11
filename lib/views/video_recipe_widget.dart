@@ -1,30 +1,41 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_flutter/blocs/recipe_event_bloc.dart';
-import 'package:recipe_flutter/blocs/events.dart';
-import 'package:recipe_flutter/blocs/state.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_bloc.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
+import 'package:recipe_flutter/core/network/network_handler.dart';
+import 'package:recipe_flutter/repository/RecipeRepository.dart';
+import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
+import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 import 'package:recipe_flutter/views/youtube_widget.dart';
 
-class VideoRecipeItem {
-  String title;
-  String thumbnailurl;
-  String youtubeId;
-  VideoRecipeItem(this.title,this.thumbnailurl,this.youtubeId);
-}
+import 'modal/list_item.dart';
 
-class VideoListWidgetStatefull extends StatefulWidget {
+class VideoListContainerWidget extends StatefulWidget {
+
+  static Widget get(){
+    final RecipeRepository recipeRepository = RecipeRepository(
+      RemoteDataSource(NetworkHandler().dio),
+    );
+    var bloc = VideoRecipeBloc(recipeRepository);
+    bloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
+
+    return BlocProvider(
+      key: PageStorageKey("video"),
+      create: (BuildContext context) => bloc..add(SearchVideos()),
+      child: VideoListContainerWidget(),
+    );
+  }
+
   @override
   State<StatefulWidget> createState() {
     return VideoRecipeListWidget();
   }
 }
 
-class VideoRecipeListWidget extends State<VideoListWidgetStatefull> {
+class VideoRecipeListWidget extends State<VideoListContainerWidget> {
   late VideoRecipeBloc bloc;
   final _scrollController = ScrollController();
 
@@ -44,7 +55,6 @@ class VideoRecipeListWidget extends State<VideoListWidgetStatefull> {
     final maxScroll = _scrollController.position.maxScrollExtent;
     final offset = _scrollController.offset;
     if (offset >= maxScroll && !_scrollController.position.outOfRange) {
-      print(" reached bottom");
       bloc.add(SearchVideos());
     }
   }

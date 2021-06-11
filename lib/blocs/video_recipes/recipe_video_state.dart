@@ -1,5 +1,5 @@
 import 'package:recipe_flutter/blocs/main/base_bloc.dart';
-import 'package:recipe_flutter/views/video_recipe_widget.dart';
+import 'package:recipe_flutter/views/modal/list_item.dart';
 
 abstract class RecipeVideoState extends AppState {}
 

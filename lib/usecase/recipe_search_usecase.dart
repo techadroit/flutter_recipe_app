@@ -5,8 +5,7 @@ import 'package:recipe_flutter/blocs/main/either.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/core/usecase/usecase.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/views/list_widget.dart';
-import 'package:recipe_flutter/views/video_recipe_widget.dart';
+import 'package:recipe_flutter/views/modal/list_item.dart';
 
 class SearchRecipeUsecase extends EitherUseCase<List<RecipeItem>, Param> {
   RecipeRepository repository;

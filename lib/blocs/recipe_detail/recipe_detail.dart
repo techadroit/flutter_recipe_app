@@ -1,9 +1,7 @@
 
-import 'package:recipe_flutter/blocs/events.dart';
 import 'package:recipe_flutter/blocs/main/base_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_event.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_state.dart';
-import 'package:recipe_flutter/blocs/state.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/usecase/recipe_detail_usecase.dart';
 

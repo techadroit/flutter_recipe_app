@@ -10,6 +10,8 @@ import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/usecase/autocomplete_usecase.dart';
 import 'package:recipe_flutter/views/list_widget.dart';
 
+import 'modal/search_item.dart';
+
 class SearchWiget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

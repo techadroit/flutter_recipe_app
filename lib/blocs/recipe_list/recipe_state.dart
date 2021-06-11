@@ -1,6 +1,6 @@
 
 import 'package:recipe_flutter/blocs/main/base_bloc.dart';
-import 'package:recipe_flutter/views/list_widget.dart';
+import 'package:recipe_flutter/views/modal/list_item.dart';
 
 abstract class RecipeState extends AppState {
   RecipeState();
@@ -13,7 +13,6 @@ class RecipeLoaded extends RecipeState {
   @override
   List<Object> get props => results;
 }
-
 
 class RecipeUninitialized extends RecipeState {}
 
