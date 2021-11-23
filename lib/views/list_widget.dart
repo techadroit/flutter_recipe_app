@@ -13,8 +13,6 @@ import '../main.dart';
 import 'modal/list_item.dart';
 import 'modal/search_item.dart';
 
-
-
 class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   RecipeItem item;
 
@@ -24,7 +22,8 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, recipeDetailRoute, arguments: item.id);
+          mainNavigationKey.currentState
+              ?.pushNamed(recipeDetailRoute, arguments: item.id);
         },
         child: Container(
             padding: EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -80,8 +79,7 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
 }
 
 class RecipeListContainerWidget extends StatelessWidget {
-
-  static Widget get(){
+  static Widget get() {
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
@@ -103,7 +101,7 @@ class RecipeListContainerWidget extends StatelessWidget {
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, searchRoute);
+            mainNavigationKey.currentState?.pushNamed(searchRoute);
           },
           child: searchView),
       Expanded(
@@ -164,16 +162,16 @@ class RecipeAutoCompleteListWidget extends StatelessWidget {
 
 var searchView = Center(
     child: Wrap(children: [
-      Container(
-        margin: EdgeInsets.all(8),
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(width: 1.0, color: Colors.grey),
-            borderRadius: BorderRadius.all(Radius.circular(12.0))),
-        child: Row(children: [Icon(Icons.search), Expanded(child: Text('Search'))]),
-      )
-    ]));
+  Container(
+    margin: EdgeInsets.all(8),
+    padding: EdgeInsets.all(8),
+    decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border.all(width: 1.0, color: Colors.grey),
+        borderRadius: BorderRadius.all(Radius.circular(12.0))),
+    child: Row(children: [Icon(Icons.search), Expanded(child: Text('Search'))]),
+  )
+]));
 
 class RecipeListItemStateFullWidget extends StatefulWidget {
   RecipeItem item;
