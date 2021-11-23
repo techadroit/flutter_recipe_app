@@ -5,6 +5,7 @@ import 'package:recipe_flutter/blocs/recipe_search/search_recipe_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_search/search_recipe_events.dart';
 import 'package:recipe_flutter/blocs/recipe_search/search_recipe_state.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
+import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/usecase/autocomplete_usecase.dart';
@@ -96,7 +97,7 @@ class SearchListWidget extends StatelessWidget {
 Widget getSearchItemWidget(BuildContext context, String title) {
   return GestureDetector(
       onTap: () {
-        Navigator.popAndPushNamed(context, "/searchList",
+        Navigator.popAndPushNamed(context, searchListRoute,
             arguments: SearchItem(keyword: title));
       },
       child: Container(

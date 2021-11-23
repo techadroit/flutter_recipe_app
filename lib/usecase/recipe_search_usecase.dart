@@ -17,7 +17,7 @@ class SearchRecipeUsecase extends EitherUseCase<List<RecipeItem>, Param> {
   Future<Either<Failure, List<RecipeItem>>> call(Param params) async {
     try {
       var response =
-          await repository.searchRecipeFor(params.keyword, params.offset);
+          await repository.searchRecipeForCuisine(params.keyword, params.offset);
       var responseItem = toRecipeItems(response);
       return Right(responseItem);
     } catch (e) {

@@ -79,7 +79,7 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
 }
 
 class RecipeListContainerWidget extends StatelessWidget {
-  static Widget get() {
+  static Widget get(SearchItem searchItem) {
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
@@ -87,13 +87,13 @@ class RecipeListContainerWidget extends StatelessWidget {
     listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
     return BlocProvider(
       create: (BuildContext context) => listbloc,
-      child: RecipeListContainerWidget(),
+      child: RecipeListContainerWidget(searchItem),
     );
   }
 
   late RecipeListBloc bloc;
-
-  RecipeListContainerWidget();
+  late SearchItem searchItem;
+  RecipeListContainerWidget(this.searchItem);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +105,7 @@ class RecipeListContainerWidget extends StatelessWidget {
           },
           child: searchView),
       Expanded(
-        child: RecipeListWidget(new SearchItem()),
+        child: RecipeListWidget(searchItem),
       ),
     ]);
   }
