@@ -9,21 +9,11 @@ import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 
+import '../main.dart';
 import 'modal/list_item.dart';
 import 'modal/search_item.dart';
 
 
-
-class RecipeListItemStateFullWidget extends StatefulWidget {
-  RecipeItem item;
-
-  RecipeListItemStateFullWidget(this.item);
-
-  @override
-  State<StatefulWidget> createState() {
-    return RecipeListItemWidgetV2(item);
-  }
-}
 
 class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   RecipeItem item;
@@ -34,7 +24,7 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
-          Navigator.pushNamed(context, "/recipeDetail", arguments: item.id);
+          Navigator.pushNamed(context, recipeDetailRoute, arguments: item.id);
         },
         child: Container(
             padding: EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -113,7 +103,7 @@ class RecipeListContainerWidget extends StatelessWidget {
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () {
-            Navigator.pushNamed(context, '/search');
+            Navigator.pushNamed(context, searchRoute);
           },
           child: searchView),
       Expanded(
@@ -184,3 +174,14 @@ var searchView = Center(
         child: Row(children: [Icon(Icons.search), Expanded(child: Text('Search'))]),
       )
     ]));
+
+class RecipeListItemStateFullWidget extends StatefulWidget {
+  RecipeItem item;
+
+  RecipeListItemStateFullWidget(this.item);
+
+  @override
+  State<StatefulWidget> createState() {
+    return RecipeListItemWidgetV2(item);
+  }
+}

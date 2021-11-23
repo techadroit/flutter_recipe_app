@@ -15,6 +15,11 @@ class RecipeRepository {
     return dataSource.getRecipes(query, offset, "10");
   }
 
+
+  Future<SearchRecipeResponse> searchRecipeForCuisine(String cuisine, int offset) async {
+    return dataSource.getRecipesForCuisine(cuisine, offset, "10");
+  }
+
   Future<List<AutoCompleteResponse>> autoComplete(String query) {
     return dataSource.autoComplete(query, 10);
   }
@@ -22,9 +27,6 @@ class RecipeRepository {
   Future<RecipeDetailResponse>? getRecipeDetail(String id, DataMapper mapper) {
     try {
       var response = dataSource.getRecipeDetailForId(id);
-      // if(mapper != null)
-      //   return mapper.mapTo(response);
-      //   else
       return response;
     } catch (e) {
       print(e);
@@ -38,5 +40,20 @@ class RecipeRepository {
 
   Future<SearchVideoRecipesResponse> loadVidoeRecipes(String query, int offset) async {
     return dataSource.loadVideoFor(query, offset, "10");
+  }
+
+  Future<List<String>> fetchCuisines() async{
+    return ["American",
+      "British",
+      "Chinese",
+      "European",
+      "French",
+      "Indian",
+      "Italian",
+      "Irish",
+      "Japanese",
+      "Mediterranean",
+      "Spanish",
+      "Thai"];
   }
 }

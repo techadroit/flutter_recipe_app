@@ -23,6 +23,15 @@ class RemoteDataSource {
       return SearchRecipeResponse.fromJson(processJson(recipeResponse));
   }
 
+  Future<SearchRecipeResponse> getRecipesForCuisine(
+      String cuisine, int offset, String number) async {
+    String url =
+        '/recipes/complexSearch?apiKey=$apikey&cuisine=$cuisine&offset=$offset&number=$number';
+    Response<String> recipeResponse = await dio.get(url);
+    if (recipeResponse.statusCode != 200) throw ServerException();
+      return SearchRecipeResponse.fromJson(processJson(recipeResponse));
+  }
+
   Future<List<AutoCompleteResponse>> autoComplete(
       String query, int number) async {
     String url =

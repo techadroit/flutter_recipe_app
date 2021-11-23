@@ -5,6 +5,7 @@ import 'package:recipe_flutter/blocs/main/either.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/core/usecase/usecase.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
+import 'package:recipe_flutter/repository/model/Cuisine.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 
 class SearchRecipeUsecase extends EitherUseCase<List<RecipeItem>, Param> {
@@ -54,6 +55,22 @@ class SearchVideoRecipeUsecase
     }
     return list;
   }
+}
+
+class FetchAllCuisines extends EitherUseCase<List<Cuisine>,NoParams>{
+  RecipeRepository recipeRepository;
+  FetchAllCuisines(this.recipeRepository);
+  @override
+  Future<Either<Failure, List<Cuisine>>> call(NoParams params) async {
+    try {
+      var response =
+          await recipeRepository.fetchCuisines();
+      return Right(response.map((e) => Cuisine(e)).toList());
+    } catch (e) {
+      return Left(ServerFailure());
+    }
+  }
+
 }
 
 List<RecipeItem> toRecipeItems(SearchRecipeResponse response) {

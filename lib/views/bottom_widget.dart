@@ -1,9 +1,8 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_flutter/views/CuisineListView.dart';
 import 'package:recipe_flutter/views/video_recipe_widget.dart';
-
-import 'list_widget.dart';
 
 class BottomWidgetContainer extends StatefulWidget {
   @override
@@ -13,7 +12,7 @@ class BottomWidgetContainer extends StatefulWidget {
 }
 
 class BottomWidgetState extends State<BottomWidgetContainer> {
-  final list = [RecipeListContainerWidget.get(), VideoListContainerWidget.get()];
+  final list = [CuisineWidget(), VideoListContainerWidget.get()];
   int currentIndex = 0;
 
   @override

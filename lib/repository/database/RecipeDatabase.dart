@@ -4,6 +4,8 @@ final String RECIPE_TABLE = "Recipe";
 final String RECIPE_ID = "recipe_id";
 final String RECIPE_TITLE = "recipe_title";
 final String RECIPE_BODY = "recipe_body";
+final String CUISINE_NAME = "cuisine_name";
+final String CUISINE_TABLE = "cuisine_name";
 
 class RecipeDatabase {
   static Future<Database> getDatabase() async {
@@ -20,7 +22,10 @@ class RecipeDatabase {
           RECIPE_TITLE +
           ' TEXT, ' +
           RECIPE_BODY +
-          ' : TEXT)');
+          ' TEXT)');
+
+      await db.execute(
+          'CREATE TABLE ' + CUISINE_TABLE + ' (' + CUISINE_NAME + ' TEXT)');
     });
   }
 }
