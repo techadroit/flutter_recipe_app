@@ -4,10 +4,13 @@ import 'package:recipe_flutter/blocs/recipe_list/recipe_events.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_list_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
+import 'package:recipe_flutter/repository/LocalRepository.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
+import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
+import 'package:recipe_flutter/views/common/save_icon.dart';
 
 import '../main.dart';
 import 'modal/list_item.dart';
@@ -58,21 +61,11 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
                                             fontFamily: 'RobotoMono'),
                                       )),
                                 ])),
-                            Container(
-                              child: IconButton(
-                                  icon: Icon(
-                                    item.isSaved
-                                        ? Icons.favorite
-                                        : Icons.favorite_border,
-                                    color:
-                                        item.isSaved ? Colors.red : Colors.grey,
-                                  ),
-                                  onPressed: () {
-                                    setState(() {
-                                      item.isSaved = true;
-                                    });
-                                  }),
-                            )
+                            SaveIconWidget(item.isSaved, (){
+                              RecipeListBloc bloc = BlocProvider.of(context);
+                              item.isSaved = !item.isSaved;
+                              bloc.add(SaveRecipes(item));
+                            })
                           ]),
                     ])))));
   }
@@ -83,7 +76,9 @@ class RecipeListContainerWidget extends StatelessWidget {
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
-    final listbloc = RecipeListBloc(recipeRepository);
+    RecipeService recipeService = RecipeService(LocalRepository(), recipeRepository);
+    final searchRecipeUsecase = SearchRecipeUsecase(recipeRepository);
+    final listbloc = RecipeListBloc(recipeRepository,recipeService,searchRecipeUsecase);
     listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
     return BlocProvider(
       create: (BuildContext context) => listbloc,
@@ -93,6 +88,7 @@ class RecipeListContainerWidget extends StatelessWidget {
 
   late RecipeListBloc bloc;
   late SearchItem searchItem;
+
   RecipeListContainerWidget(this.searchItem);
 
   @override
@@ -105,16 +101,41 @@ class RecipeListContainerWidget extends StatelessWidget {
           },
           child: searchView),
       Expanded(
-        child: RecipeListWidget(searchItem),
+        child: RecipeListStateFullWidget(searchItem),
       ),
     ]);
   }
 }
 
-class RecipeListWidget extends StatelessWidget {
+class RecipeListStateFullWidget extends StatefulWidget {
   late SearchItem searchItem;
 
-  RecipeListWidget(this.searchItem);
+  RecipeListStateFullWidget(this.searchItem);
+
+  @override
+  State<StatefulWidget> createState() {
+    return RecipeListWidgetState(searchItem);
+  }
+}
+
+class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
+  late SearchItem searchItem;
+  ScrollController scrollController = ScrollController();
+
+  RecipeListWidgetState(this.searchItem);
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  _scrollListener() {
+    if (scrollController.hasClients &&
+        scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      debugPrint(" reached bottom");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,35 +148,48 @@ class RecipeListWidget extends StatelessWidget {
           bloc.add(SearchRecipes(keyword: searchItem.keyword));
           return Container();
         } else if (state is RecipeLoaded) {
+          // if (!scrollController.hasListeners)
+          //   scrollController.addListener(_scrollListener());
           var list = state.results;
-          return ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (context, index) {
-                return RecipeListItemStateFullWidget(list[index]);
-              });
+          return loadList(list);
+        } else if (state is RecipeSaved) {
+          var list = state.results;
+          return loadList(list);
         } else {
           return Center(child: CircularProgressIndicator());
         }
       },
     );
   }
+
+  Widget loadList(List<RecipeItem> list){
+    return ListView.builder(
+        controller: scrollController,
+        itemCount: list.length,
+        itemBuilder: (context, index) {
+          return RecipeListItemStateFullWidget(list[index]);
+        });
+  }
 }
 
 class RecipeAutoCompleteListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
     final SearchItem searchItem =
         ModalRoute.of(context)!.settings.arguments as SearchItem;
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
-    var listbloc = RecipeListBloc(recipeRepository);
+    RecipeService recipeService = RecipeService(LocalRepository(), recipeRepository);
+    final searchRecipeUsecase = SearchRecipeUsecase(recipeRepository);
+    var listbloc = RecipeListBloc(recipeRepository,recipeService,searchRecipeUsecase);
     listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
     return BlocProvider(
         create: (BuildContext buildcontext) => listbloc,
         child: Container(
           color: Colors.white,
-          child: RecipeListWidget(searchItem),
+          child: RecipeListStateFullWidget(searchItem),
         ));
   }
 }

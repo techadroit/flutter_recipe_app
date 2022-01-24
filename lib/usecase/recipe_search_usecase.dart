@@ -73,7 +73,7 @@ class FetchAllCuisines extends EitherUseCase<List<Cuisine>,NoParams>{
 
 }
 
-List<RecipeItem> toRecipeItems(SearchRecipeResponse response) {
+List<RecipeItem> toRecipeItemsV1(SearchRecipeResponse response) {
   List<Results> list = response.results!;
   List<RecipeItem> recipeList = <RecipeItem>[];
   for (int i = 0; i < list.length; i++) {
@@ -84,6 +84,23 @@ List<RecipeItem> toRecipeItems(SearchRecipeResponse response) {
         result.servings.toString(),
         result.readyInMinutes.toString(),
         response.baseUri! + result.image!,
+        false);
+    recipeList.add(item);
+  }
+  return recipeList;
+}
+
+List<RecipeItem> toRecipeItems(SearchRecipeResponse response) {
+  List<Results> list = response.results!;
+  List<RecipeItem> recipeList = <RecipeItem>[];
+  for (int i = 0; i < list.length; i++) {
+    var result = list[i];
+    var item = RecipeItem(
+        result.id.toString(),
+        result.title ?? "",
+        result.servings.toString(),
+        result.readyInMinutes.toString(),
+        result.image ?? "",
         false);
     recipeList.add(item);
   }

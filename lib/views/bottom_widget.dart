@@ -1,7 +1,9 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_flutter/blocs/saved_recipes/save_recipe_state.dart';
 import 'package:recipe_flutter/views/CuisineListView.dart';
+import 'package:recipe_flutter/views/saved_recipes.dart';
 import 'package:recipe_flutter/views/video_recipe_widget.dart';
 
 class BottomWidgetContainer extends StatefulWidget {
@@ -12,7 +14,7 @@ class BottomWidgetContainer extends StatefulWidget {
 }
 
 class BottomWidgetState extends State<BottomWidgetContainer> {
-  final list = [CuisineWidget(), VideoListContainerWidget.get()];
+  final list = [CuisineWidget(), VideoListContainerWidget.get(),SavedRecipeWidget()];
   int currentIndex = 0;
 
   @override
@@ -37,6 +39,10 @@ class BottomWidgetState extends State<BottomWidgetContainer> {
                     icon: Icon(Icons.video_call),
                     backgroundColor: Colors.blue,
                     title: Text("Videos")),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.account_box),
+                    backgroundColor: Colors.blue,
+                    title: Text("SavedRecipe")),
               ]),
         ));
   }

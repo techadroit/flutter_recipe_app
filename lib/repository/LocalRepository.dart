@@ -14,11 +14,27 @@ class LocalRepository {
         .then((database) => database.insert(RECIPE_TABLE, data.toMap()));
   }
 
-  // Future<List<RecipeData>> getAllRecipes() async{
-  //   Database database = await getDatabase();
-  //   List<Map> result = await database.query(RECIPE_TABLE);
-  //   return result;
-  // }
+  Future<List<RecipeData>> getAllRecipes() async{
+    Database database = await getDatabase();
+    var response = await database.query(RECIPE_TABLE);
+
+    List<RecipeData> list = List.empty(growable: true);
+    response.forEach((element) {
+      var data = RecipeData.fromMap(element);
+      list.add(data);
+    });
+    return list.toSet().toList();
+  }
+
+  Future<void> saveRecipe(List<RecipeData> data) async {
+    return await getDatabase().then((database) {
+      var batch = database.batch();
+      data.forEach((element) {
+        batch.insert(RECIPE_TABLE, element.toMap());
+      });
+      batch.commit();
+    });
+  }
 
   Future<void> saveCuisines(List<CuisineData> data) async {
     return await getDatabase().then((database) {
