@@ -50,7 +50,7 @@ void main() {
         primaryColor: Colors.black,
         fontFamily: 'Raleway',
         textTheme: TextTheme(
-            headline: TextStyle(fontSize: 24, fontFamily: 'RobotMono'))),
+            headline1: TextStyle(fontSize: 24, fontFamily: 'RobotMono'))),
   ));
 
 }

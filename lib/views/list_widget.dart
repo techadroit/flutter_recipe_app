@@ -107,7 +107,7 @@ class RecipeListContainerWidget extends StatelessWidget {
 }
 
 class RecipeListStateFullWidget extends StatefulWidget {
-  late SearchItem searchItem;
+  final SearchItem searchItem;
 
   RecipeListStateFullWidget(this.searchItem);
 
@@ -209,7 +209,7 @@ var searchView = Center(
 ]));
 
 class RecipeListItemStateFullWidget extends StatefulWidget {
-  RecipeItem item;
+  final RecipeItem item;
 
   RecipeListItemStateFullWidget(this.item);
 

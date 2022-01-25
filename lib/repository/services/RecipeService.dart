@@ -1,13 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:recipe_flutter/api_response/search_recipe_response.dart';
-import 'package:recipe_flutter/blocs/main/either.dart';
-import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/repository/LocalRepository.dart';
 import 'package:recipe_flutter/repository/database/CuisineData.dart';
 import 'package:recipe_flutter/repository/database/RecipeData.dart';
 import 'package:recipe_flutter/repository/model/Cuisine.dart';
-import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:recipe_flutter/views/modal/cuisine_with_recipe.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 
@@ -48,8 +44,9 @@ class RecipeService {
     }
   }
 
-  List<RecipeItem> toRecipeItems(SearchRecipeResponse response,
-      ) {
+  List<RecipeItem> toRecipeItems(
+    SearchRecipeResponse response,
+  ) {
     List<Results> list = response.results!;
     List<RecipeItem> recipeList = <RecipeItem>[];
     for (int i = 0; i < list.length; i++) {
@@ -66,24 +63,22 @@ class RecipeService {
     return recipeList;
   }
 
-
   List<RecipeItem> toRecipeItemsFromRecipeData(List<RecipeData> list) {
     List<RecipeItem> recipeList = <RecipeItem>[];
     for (int i = 0; i < list.length; i++) {
       var result = list[i];
-      var item = RecipeItem(result.id.toString(), result.title ?? "", "", "",
-          result.recipeImageUrl ?? "", false);
+      var item = RecipeItem(result.id.toString(), result.title, "", "",
+          result.recipeImageUrl, false);
       recipeList.add(item);
     }
     return recipeList;
   }
-
 }
 
 class ServiceParam extends Equatable {
-  String keyword;
-  int offset;
-  int number = 10;
+  final String keyword;
+  final int offset;
+  final int number;
 
   ServiceParam(this.keyword, this.offset, {this.number = 10});
 

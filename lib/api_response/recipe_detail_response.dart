@@ -34,7 +34,7 @@ class RecipeDetailResponse {
   WinePairing? winePairing;
   String? instructions;
   List<AnalyzedInstructions>? analyzedInstructions;
-  dynamic? originalId;
+  dynamic originalId;
 
   RecipeDetailResponse({
       this.vegetarian, 

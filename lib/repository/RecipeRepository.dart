@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:recipe_flutter/api_response/auto_complete_response.dart';
 import 'package:recipe_flutter/api_response/recipe_detail_response.dart';
 import 'package:recipe_flutter/api_response/search_recipe_response.dart';
@@ -15,8 +14,8 @@ class RecipeRepository {
     return dataSource.getRecipes(query, offset, "10");
   }
 
-
-  Future<SearchRecipeResponse> searchRecipeForCuisine(String cuisine, int offset) async {
+  Future<SearchRecipeResponse> searchRecipeForCuisine(
+      String cuisine, int offset) async {
     return dataSource.getRecipesForCuisine(cuisine, offset, "10");
   }
 
@@ -33,17 +32,19 @@ class RecipeRepository {
     }
   }
 
-  Future<RecipeDetailResponse> getRecipeInformation(String id) async{
+  Future<RecipeDetailResponse> getRecipeInformation(String id) async {
     var response = await dataSource.getRecipeDetailForId(id);
     return response;
   }
 
-  Future<SearchVideoRecipesResponse> loadVidoeRecipes(String query, int offset) async {
+  Future<SearchVideoRecipesResponse> loadVidoeRecipes(
+      String query, int offset) async {
     return dataSource.loadVideoFor(query, offset, "10");
   }
 
-  Future<List<String>> fetchCuisines() async{
-    return ["American",
+  Future<List<String>> fetchCuisines() async {
+    return [
+      "American",
       "British",
       "Chinese",
       "European",
@@ -54,6 +55,7 @@ class RecipeRepository {
       "Japanese",
       "Mediterranean",
       "Spanish",
-      "Thai"];
+      "Thai"
+    ];
   }
 }

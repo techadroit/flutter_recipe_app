@@ -87,7 +87,7 @@ class VideoRecipeListWidget extends State<VideoListContainerWidget> {
 }
 
 class VideoRecipeItemWidget extends StatelessWidget {
-  VideoRecipeItem item;
+  final VideoRecipeItem item;
 
   VideoRecipeItemWidget(this.item);
 
@@ -104,7 +104,7 @@ class VideoRecipeItemWidget extends StatelessWidget {
             onTap: () => Navigator.of(context).pushNamed("/youtube_video",
                 arguments: YoutubeArgument(item.youtubeId)),
             child: Image.network(
-              item.thumbnailurl,
+              item.thumbnailUrl,
               height: 100,
               width: 120,
             ),
@@ -119,7 +119,7 @@ class VideoRecipeItemWidget extends StatelessWidget {
 }
 
 class VideoRecipeItemWidgetV2 extends StatelessWidget {
-  VideoRecipeItem item;
+  final VideoRecipeItem item;
 
   VideoRecipeItemWidgetV2(this.item);
 
@@ -133,7 +133,7 @@ class VideoRecipeItemWidgetV2 extends StatelessWidget {
             onTap: () => Navigator.of(context).pushNamed("/youtube_video",
                 arguments: YoutubeArgument(item.youtubeId)),
             child: Stack(alignment: Alignment.center, children: <Widget>[
-              Image.network(item.thumbnailurl,
+              Image.network(item.thumbnailUrl,
                   height: IMAGE_HEIGHT,
                   width: double.infinity,
                   fit: BoxFit.cover),

@@ -15,7 +15,7 @@ class NoResultFound extends Failure{
 }
 
 class Error extends Equatable{
-  Failure failure;
+  final Failure failure;
   Error(this.failure);
 
   @override

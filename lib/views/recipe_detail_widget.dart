@@ -4,7 +4,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_event.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_state.dart';
-import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/mapper/DataMapper.dart';
@@ -22,16 +21,15 @@ class RecipeDetailParentWidget extends StatefulWidget {
 }
 
 class RecipeDetailParentState extends State<RecipeDetailParentWidget> {
-
   final RecipeRepository recipeRepository = RecipeRepository(
-   RemoteDataSource(NetworkHandler().dio),
+    RemoteDataSource(NetworkHandler().dio),
   );
   late RecipeDetailBloc bloc;
 
-  RecipeDetailParentState(){
+  RecipeDetailParentState() {
     bloc = RecipeDetailBloc(recipeRepository);
-    bloc.fetchRecipeDetailUsecase  =
-        FetchRecipeDetailUsecase(recipeRepository,RecipeDetailMapper());
+    bloc.fetchRecipeDetailUsecase =
+        FetchRecipeDetailUsecase(recipeRepository, RecipeDetailMapper());
   }
 
   @override
@@ -58,7 +56,7 @@ class RecipeDetailWidget extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (state is RecipeDetailLoaded) {
             return getDetailBody(state.recipeDetail);
-          }else{
+          } else {
             return Container();
           }
         });
@@ -66,7 +64,6 @@ class RecipeDetailWidget extends StatelessWidget {
 }
 
 Widget getDetailBody(RecipeDetail recipeDetail) {
-
   var insets = EdgeInsets.only(left: 12, right: 12, top: 12);
   return ListView(
     children: <Widget>[
@@ -103,8 +100,9 @@ Widget getDetailBody(RecipeDetail recipeDetail) {
                 fontFamily: 'RobotoMono'),
           )),
       Padding(
-          padding:insets,
-          child: Html(data: recipeDetail.description,
+          padding: insets,
+          child: Html(
+            data: recipeDetail.description,
           )),
 //      getIngredients(recipeDetail.ingredientList)
     ],

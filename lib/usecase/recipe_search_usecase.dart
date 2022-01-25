@@ -108,13 +108,12 @@ List<RecipeItem> toRecipeItems(SearchRecipeResponse response) {
 }
 
 class Param extends Equatable {
-  String keyword;
-  int offset;
+  final String keyword;
+  final int offset;
   int number = 10;
 
   Param(this.keyword, this.offset, {this.number = 10});
 
   @override
-  // TODO: implement props
   List<Object?> get props => [keyword, offset, number];
 }

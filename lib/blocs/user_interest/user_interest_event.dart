@@ -6,7 +6,7 @@ class UserInterestEvent extends AppEvent {}
 class LoadAllCuisines extends UserInterestEvent {}
 
 class CuisineSelected extends UserInterestEvent {
-  Cuisine cuisine;
+  final Cuisine cuisine;
 
   CuisineSelected(this.cuisine);
 }

@@ -79,7 +79,7 @@ class UserInterestScreenWidgetState extends State<UserInterestScreenWidget> {
 }
 
 class ChipListWidget extends StatelessWidget {
-  late List<Cuisine> cuisineList;
+  final List<Cuisine> cuisineList;
 
   ChipListWidget(this.cuisineList);
 
@@ -114,8 +114,8 @@ class NextButton extends StatelessWidget {
 }
 
 class ChipWidget extends StatelessWidget {
-  bool isSelected = false;
-  Cuisine cuisine;
+  final bool isSelected;
+  final Cuisine cuisine;
 
   ChipWidget(this.isSelected, this.cuisine);
 

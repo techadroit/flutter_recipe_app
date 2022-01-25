@@ -116,7 +116,7 @@ class _CuisineListViewState extends State<CuisineListView> {
                                 ),
                                 SizedBox(
                                   height: 260,
-                                  child: RecipeList(recipeList,cuisine),
+                                  child: RecipeList(recipeList, cuisine),
                                 )
                               ],
                             );
@@ -138,9 +138,10 @@ class _CuisineListViewState extends State<CuisineListView> {
 }
 
 class RecipeList extends StatelessWidget {
-  late List<RecipeItem> list;
-  late Cuisine cuisine;
-  RecipeList(this.list,this.cuisine);
+  final List<RecipeItem> list;
+  final Cuisine cuisine;
+
+  RecipeList(this.list, this.cuisine);
 
   @override
   Widget build(BuildContext context) {
@@ -216,15 +217,16 @@ class RecipeGridItem extends State<RecipeGridItemStateFullWidget> {
 }
 
 class ViewAllView extends StatelessWidget {
+  final String cuisine;
 
-  String cuisine;
   ViewAllView(this.cuisine);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, recipeList,arguments: SearchItem(keyword: cuisine));
+        Navigator.pushNamed(context, recipeList,
+            arguments: SearchItem(keyword: cuisine));
       },
       child: Center(
         child: Padding(
