@@ -7,9 +7,8 @@ import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/repository/LocalRepository.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
-import 'package:recipe_flutter/repository/services/RecipeService.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
-import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 import 'package:recipe_flutter/views/common/save_icon.dart';
 import 'package:recipe_flutter/views/error_screen.dart';
 
@@ -77,12 +76,9 @@ class RecipeListContainerWidget extends StatelessWidget {
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
-    RecipeService recipeService =
-        RecipeService(LocalRepository(), recipeRepository);
-    final searchRecipeUsecase = SearchRecipeUsecase(recipeRepository);
-    final listbloc =
-        RecipeListBloc(recipeRepository, recipeService, searchRecipeUsecase);
-    listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
+    SearchRecipeService recipeService =
+        SearchRecipeService(LocalRepository(), recipeRepository);
+    final listbloc = RecipeListBloc(recipeRepository, recipeService);
     return BlocProvider(
       create: (BuildContext context) => listbloc,
       child: RecipeListContainerWidget(searchItem),
@@ -123,20 +119,28 @@ class RecipeListStateFullWidget extends StatefulWidget {
 
 class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
   late SearchItem searchItem;
-  ScrollController scrollController = ScrollController();
+  final _scrollController = ScrollController();
 
   RecipeListWidgetState(this.searchItem);
 
   @override
   void initState() {
     super.initState();
+    _scrollController.addListener(_onScroll);
   }
 
-  _scrollListener() {
-    if (scrollController.hasClients &&
-        scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
-      debugPrint(" reached bottom");
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.removeListener(_onScroll);
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final offset = _scrollController.offset;
+    if (offset >= maxScroll && !_scrollController.position.outOfRange) {
+      BlocProvider.of<RecipeListBloc>(context).add(SearchRecipes(
+          keyword: searchItem.keyword, isSearch: searchItem.search));
     }
   }
 
@@ -163,7 +167,7 @@ class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
 
   Widget loadList(List<RecipeItem> list) {
     return ListView.builder(
-        controller: scrollController,
+        controller: _scrollController,
         itemCount: list.length,
         itemBuilder: (context, index) {
           return RecipeListItemStateFullWidget(list[index]);
@@ -179,11 +183,9 @@ class RecipeAutoCompleteListWidget extends StatelessWidget {
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
-    RecipeService recipeService =
-        RecipeService(LocalRepository(), recipeRepository);
-    final searchRecipeUsecase = SearchRecipeUsecase(recipeRepository);
-    var listbloc =
-        RecipeListBloc(recipeRepository, recipeService, searchRecipeUsecase);
+    SearchRecipeService recipeService =
+        SearchRecipeService(LocalRepository(), recipeRepository);
+    var listbloc = RecipeListBloc(recipeRepository, recipeService);
     return BlocProvider(
         create: (BuildContext buildcontext) => listbloc,
         child: Container(

@@ -5,23 +5,22 @@ import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
-import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 
 class RecipeListBloc extends BaseBloc<RecipeListEvent, RecipeState> {
   late final RecipeRepository repository;
   int offset = 0;
-  late SearchRecipeUsecase recipeUsecase;
-  late RecipeService recipeService;
+  late SearchRecipeService recipeService;
+  String keyword = "";
   List<RecipeItem> recipeList = List.empty(growable: true);
 
-  RecipeListBloc(this.repository, this.recipeService, this.recipeUsecase)
-      : super(RecipeState.initialState());
+  RecipeListBloc(this.repository, this.recipeService)
+      : super(RecipeState.loading(true));
 
   @override
   Stream<RecipeState> mapEventToState(RecipeListEvent event) async* {
     if (event is SearchRecipes) {
-      yield RecipeState.loading(true);
       try {
         var response = await getRecipes(event.isSearch, event.keyword);
         yield onRecipeLoad(response);
@@ -36,7 +35,7 @@ class RecipeListBloc extends BaseBloc<RecipeListEvent, RecipeState> {
 
   Future<Either<Failure, List<RecipeItem>>> getRecipes(
       bool isSearch, String keyword) async {
-    var param = new ServiceParam(keyword, 1);
+    var param = getParam(keyword);
     if (isSearch) {
       return await recipeService.searchRecipes(param);
     } else {
@@ -44,12 +43,34 @@ class RecipeListBloc extends BaseBloc<RecipeListEvent, RecipeState> {
     }
   }
 
+  ServiceParam getParam(String key) {
+    if (keyword == key) {
+      offset = offset + 1;
+    } else {
+      offset = 0;
+    }
+    keyword = key;
+    return new ServiceParam(keyword, offset);
+  }
+
   RecipeState onRecipeLoad(Either<Failure, List<RecipeItem>> response) {
     return response.fold((l) => RecipeState.onError(Error(ServerFailure())),
         (r) {
-      recipeList = r;
-      return RecipeState.loaded(r);
+      return onSuccessVideoLoad(r);
     });
+  }
+
+  RecipeState onSuccessVideoLoad(List<RecipeItem> newList) {
+    final currentState = state;
+    if (currentState.results.isNotEmpty) {
+      var currentList = currentState.results;
+      var resultList = currentList + newList;
+      recipeList = resultList;
+      return RecipeState.loaded(resultList);
+    } else {
+      recipeList = newList;
+      return RecipeState.loaded(newList);
+    }
   }
 
   void onSaveRecipe(RecipeItem recipeItem) {

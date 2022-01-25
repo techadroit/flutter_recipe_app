@@ -66,22 +66,6 @@ class RecipeService {
     return recipeList;
   }
 
-  List<RecipeItem> toRecipeItemsWithSource(SearchRecipeResponse response, String sourceUrl) {
-    List<Results> list = response.results!;
-    List<RecipeItem> recipeList = <RecipeItem>[];
-    for (int i = 0; i < list.length; i++) {
-      var result = list[i];
-      var item = RecipeItem(
-          result.id.toString(),
-          result.title ?? "",
-          result.servings.toString(),
-          result.readyInMinutes.toString(),
-          (sourceUrl + result.image!) ?? "",
-          false);
-      recipeList.add(item);
-    }
-    return recipeList;
-  }
 
   List<RecipeItem> toRecipeItemsFromRecipeData(List<RecipeData> list) {
     List<RecipeItem> recipeList = <RecipeItem>[];
@@ -94,40 +78,6 @@ class RecipeService {
     return recipeList;
   }
 
-  Future<Either<Failure, List<RecipeItem>>> searchRecipes(
-      ServiceParam params) async {
-    try {
-      var response =
-          await recipeRepository.searchRecipeFor(params.keyword, params.offset);
-      var responseItem =
-      toRecipeItemsWithSource(response, RecipeApiClient.imageBaseurl);
-      if (responseItem.isEmpty) {
-        return Left(NoResultFound());
-      } else {
-        return Right(responseItem);
-      }
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
-      return Left(ServerFailure());
-    }
-  }
-
-  Future<Either<Failure, List<RecipeItem>>> searchRecipesForCuisine(
-      ServiceParam params) async {
-    try {
-      var response = await recipeRepository.searchRecipeForCuisine(
-          params.keyword, params.offset);
-      var responseItem = toRecipeItems(response);
-      if (responseItem.isEmpty) {
-        return Left(NoResultFound());
-      } else {
-        return Right(responseItem);
-      }
-    } catch (e, s) {
-      debugPrintStack(stackTrace: s);
-      return Left(ServerFailure());
-    }
-  }
 }
 
 class ServiceParam extends Equatable {
