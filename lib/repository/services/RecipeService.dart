@@ -1,8 +1,13 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:recipe_flutter/api_response/search_recipe_response.dart';
+import 'package:recipe_flutter/blocs/main/either.dart';
+import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/repository/LocalRepository.dart';
 import 'package:recipe_flutter/repository/database/CuisineData.dart';
 import 'package:recipe_flutter/repository/database/RecipeData.dart';
 import 'package:recipe_flutter/repository/model/Cuisine.dart';
+import 'package:recipe_flutter/repository/network/RecipeApiClient.dart';
 import 'package:recipe_flutter/views/modal/cuisine_with_recipe.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 
@@ -43,7 +48,8 @@ class RecipeService {
     }
   }
 
-  List<RecipeItem> toRecipeItems(SearchRecipeResponse response) {
+  List<RecipeItem> toRecipeItems(SearchRecipeResponse response,
+      ) {
     List<Results> list = response.results!;
     List<RecipeItem> recipeList = <RecipeItem>[];
     for (int i = 0; i < list.length; i++) {
@@ -60,6 +66,23 @@ class RecipeService {
     return recipeList;
   }
 
+  List<RecipeItem> toRecipeItemsWithSource(SearchRecipeResponse response, String sourceUrl) {
+    List<Results> list = response.results!;
+    List<RecipeItem> recipeList = <RecipeItem>[];
+    for (int i = 0; i < list.length; i++) {
+      var result = list[i];
+      var item = RecipeItem(
+          result.id.toString(),
+          result.title ?? "",
+          result.servings.toString(),
+          result.readyInMinutes.toString(),
+          (sourceUrl + result.image!) ?? "",
+          false);
+      recipeList.add(item);
+    }
+    return recipeList;
+  }
+
   List<RecipeItem> toRecipeItemsFromRecipeData(List<RecipeData> list) {
     List<RecipeItem> recipeList = <RecipeItem>[];
     for (int i = 0; i < list.length; i++) {
@@ -70,4 +93,50 @@ class RecipeService {
     }
     return recipeList;
   }
+
+  Future<Either<Failure, List<RecipeItem>>> searchRecipes(
+      ServiceParam params) async {
+    try {
+      var response =
+          await recipeRepository.searchRecipeFor(params.keyword, params.offset);
+      var responseItem =
+      toRecipeItemsWithSource(response, RecipeApiClient.imageBaseurl);
+      if (responseItem.isEmpty) {
+        return Left(NoResultFound());
+      } else {
+        return Right(responseItem);
+      }
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      return Left(ServerFailure());
+    }
+  }
+
+  Future<Either<Failure, List<RecipeItem>>> searchRecipesForCuisine(
+      ServiceParam params) async {
+    try {
+      var response = await recipeRepository.searchRecipeForCuisine(
+          params.keyword, params.offset);
+      var responseItem = toRecipeItems(response);
+      if (responseItem.isEmpty) {
+        return Left(NoResultFound());
+      } else {
+        return Right(responseItem);
+      }
+    } catch (e, s) {
+      debugPrintStack(stackTrace: s);
+      return Left(ServerFailure());
+    }
+  }
+}
+
+class ServiceParam extends Equatable {
+  String keyword;
+  int offset;
+  int number = 10;
+
+  ServiceParam(this.keyword, this.offset, {this.number = 10});
+
+  @override
+  List<Object?> get props => [keyword, offset, number];
 }

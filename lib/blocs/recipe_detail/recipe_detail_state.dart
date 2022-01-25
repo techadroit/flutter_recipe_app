@@ -8,7 +8,7 @@ class RecipeDetailLoaded extends RecipeDetailState{
   RecipeDetail recipeDetail;
   RecipeDetailLoaded(this.recipeDetail);
   @override
-  List<Object> get props => [recipeDetail];
+  List<Object?> get props => [recipeDetail];
 }
 
 

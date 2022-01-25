@@ -11,5 +11,5 @@ class FetchRecipeDetail extends RecipeDetailEvent{
  FetchRecipeDetail(this.id);
 
  @override
-  List<Object> get props => [id];
+  List<Object?> get props => [id];
 }

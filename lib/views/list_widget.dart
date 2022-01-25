@@ -11,6 +11,7 @@ import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 import 'package:recipe_flutter/views/common/save_icon.dart';
+import 'package:recipe_flutter/views/error_screen.dart';
 
 import '../main.dart';
 import 'modal/list_item.dart';
@@ -61,7 +62,7 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
                                             fontFamily: 'RobotoMono'),
                                       )),
                                 ])),
-                            SaveIconWidget(item.isSaved, (){
+                            SaveIconWidget(item.isSaved, () {
                               RecipeListBloc bloc = BlocProvider.of(context);
                               item.isSaved = !item.isSaved;
                               bloc.add(SaveRecipes(item));
@@ -76,9 +77,11 @@ class RecipeListContainerWidget extends StatelessWidget {
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
-    RecipeService recipeService = RecipeService(LocalRepository(), recipeRepository);
+    RecipeService recipeService =
+        RecipeService(LocalRepository(), recipeRepository);
     final searchRecipeUsecase = SearchRecipeUsecase(recipeRepository);
-    final listbloc = RecipeListBloc(recipeRepository,recipeService,searchRecipeUsecase);
+    final listbloc =
+        RecipeListBloc(recipeRepository, recipeService, searchRecipeUsecase);
     listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
     return BlocProvider(
       create: (BuildContext context) => listbloc,
@@ -141,18 +144,14 @@ class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
   Widget build(BuildContext context) {
     RecipeListBloc bloc = BlocProvider.of(context);
     return BlocBuilder(
-      bloc: bloc,
+      bloc: bloc
+        ..add(SearchRecipes(
+            keyword: searchItem.keyword, isSearch: searchItem.search)),
       // ignore: missing_return
-      builder: (context, state) {
-        if (state is RecipeUninitialized) {
-          bloc.add(SearchRecipes(keyword: searchItem.keyword));
-          return Container();
-        } else if (state is RecipeLoaded) {
-          // if (!scrollController.hasListeners)
-          //   scrollController.addListener(_scrollListener());
-          var list = state.results;
-          return loadList(list);
-        } else if (state is RecipeSaved) {
+      builder: (context, RecipeState state) {
+        if (state.error != null) {
+          return ErrorScreen.get(state.error!.failure);
+        } else if (state.results.isNotEmpty) {
           var list = state.results;
           return loadList(list);
         } else {
@@ -162,7 +161,7 @@ class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
     );
   }
 
-  Widget loadList(List<RecipeItem> list){
+  Widget loadList(List<RecipeItem> list) {
     return ListView.builder(
         controller: scrollController,
         itemCount: list.length,
@@ -175,16 +174,16 @@ class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
 class RecipeAutoCompleteListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     final SearchItem searchItem =
         ModalRoute.of(context)!.settings.arguments as SearchItem;
     final RecipeRepository recipeRepository = RecipeRepository(
       RemoteDataSource(NetworkHandler().dio),
     );
-    RecipeService recipeService = RecipeService(LocalRepository(), recipeRepository);
+    RecipeService recipeService =
+        RecipeService(LocalRepository(), recipeRepository);
     final searchRecipeUsecase = SearchRecipeUsecase(recipeRepository);
-    var listbloc = RecipeListBloc(recipeRepository,recipeService,searchRecipeUsecase);
-    listbloc.recipeUsecase = SearchRecipeUsecase(recipeRepository);
+    var listbloc =
+        RecipeListBloc(recipeRepository, recipeService, searchRecipeUsecase);
     return BlocProvider(
         create: (BuildContext buildcontext) => listbloc,
         child: Container(

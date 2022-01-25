@@ -10,7 +10,7 @@ class SearchError extends SearchRecipeState {
   SearchError();
 
   @override
-  List<Object> get props => super.props;
+  List<Object?> get props => super.props;
 }
 
 class SearchCompleteState extends SearchRecipeState {
@@ -19,5 +19,5 @@ class SearchCompleteState extends SearchRecipeState {
   SearchCompleteState(this.list);
 
   @override
-  List<Object> get props => list;
+  List<Object?> get props => list;
 }

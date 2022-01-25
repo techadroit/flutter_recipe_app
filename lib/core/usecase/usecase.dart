@@ -22,13 +22,13 @@ abstract class CompletableUsecase<Params> extends Usecase{
 /// represent no parameter supply to usecases
 class NoParams extends Equatable {
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 /// represent empty result
 class Empty extends Equatable{
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object?> get props => [];
 
 }

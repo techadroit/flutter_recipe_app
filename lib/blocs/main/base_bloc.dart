@@ -10,10 +10,10 @@ abstract class BaseBloc<E extends AppEvent,S extends AppState>
 
 abstract class AppState extends Equatable{
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 abstract class AppEvent extends Equatable{
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }

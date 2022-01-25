@@ -9,7 +9,6 @@ import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/usecase/autocomplete_usecase.dart';
-import 'package:recipe_flutter/views/list_widget.dart';
 
 import 'modal/search_item.dart';
 
@@ -98,7 +97,7 @@ Widget getSearchItemWidget(BuildContext context, String title) {
   return GestureDetector(
       onTap: () {
         Navigator.popAndPushNamed(context, searchListRoute,
-            arguments: SearchItem(keyword: title));
+            arguments: SearchItem(keyword: title,search: true));
       },
       child: Container(
           width: double.infinity,

@@ -45,5 +45,5 @@ class UserInterestState extends AppState {
   }
 
   @override
-  List<Object> get props => [allCuisines, enableNextOptions, cuisineSaved];
+  List<Object?> get props => [allCuisines, enableNextOptions, cuisineSaved];
 }

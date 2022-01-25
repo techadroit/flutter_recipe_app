@@ -40,7 +40,7 @@ void main() {
     routes: {
       userInterestRoute: (context) => UserInterestScreenWidget(),
       mainRoute: (context) => BottomWidgetContainer(),
-      errorRoute: (context) => ErrorScreen(),
+      errorRoute: (context) => InvalidKeyErrorScreen(),
       searchRoute: (context) => SearchWiget(),
       searchListRoute: (context) => RecipeAutoCompleteListWidget(),
       recipeDetailRoute: (context) => RecipeDetailParentWidget(),

@@ -9,7 +9,7 @@ class VideoRecipeLoaded extends RecipeVideoState {
   VideoRecipeLoaded(this.list);
 
   @override
-  List<Object> get props => list;
+  List<Object?> get props => list;
 }
 
 class VideoRecipeUninitialized extends RecipeVideoState {}
@@ -22,5 +22,5 @@ class VideoRecipeLoad extends RecipeVideoState {
   VideoRecipeLoad(this.isLoading);
 
   @override
-  List<Object> get props => super.props;
+  List<Object?> get props => super.props;
 }

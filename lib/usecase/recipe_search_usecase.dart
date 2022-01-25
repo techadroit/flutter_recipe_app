@@ -116,5 +116,5 @@ class Param extends Equatable {
 
   @override
   // TODO: implement props
-  List<Object> get props => [keyword, offset, number];
+  List<Object?> get props => [keyword, offset, number];
 }

@@ -15,18 +15,18 @@ class RecipeListBloc extends BaseBloc<RecipeListEvent, RecipeState> {
   late RecipeService recipeService;
   List<RecipeItem> recipeList = List.empty(growable: true);
 
-  RecipeListBloc(this.repository, this.recipeService,this.recipeUsecase)
-      : super(RecipeUninitialized());
+  RecipeListBloc(this.repository, this.recipeService, this.recipeUsecase)
+      : super(RecipeState.initialState());
 
   @override
   Stream<RecipeState> mapEventToState(RecipeListEvent event) async* {
     if (event is SearchRecipes) {
-      yield RecipeLoad(true);
+      yield RecipeState.loading(true);
       try {
-        var response = await recipeUsecase(Param(event.keyword, 1));
+        var response = await getRecipes(event.isSearch, event.keyword);
         yield onRecipeLoad(response);
       } catch (_) {
-        yield RecipeError();
+        yield RecipeState.onError(Error(ServerFailure()));
       }
     } else if (event is SaveRecipes) {
       await recipeService.saveAllRecipes([event.recipeItem]);
@@ -34,10 +34,21 @@ class RecipeListBloc extends BaseBloc<RecipeListEvent, RecipeState> {
     }
   }
 
+  Future<Either<Failure, List<RecipeItem>>> getRecipes(
+      bool isSearch, String keyword) async {
+    var param = new ServiceParam(keyword, 1);
+    if (isSearch) {
+      return await recipeService.searchRecipes(param);
+    } else {
+      return await recipeService.searchRecipesForCuisine(param);
+    }
+  }
+
   RecipeState onRecipeLoad(Either<Failure, List<RecipeItem>> response) {
-    return response.fold((l) => RecipeError(), (r) {
+    return response.fold((l) => RecipeState.onError(Error(ServerFailure())),
+        (r) {
       recipeList = r;
-      return RecipeLoaded(r);
+      return RecipeState.loaded(r);
     });
   }
 

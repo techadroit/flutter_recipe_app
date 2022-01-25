@@ -15,5 +15,5 @@ class CuisineListState extends AppState {
   }
 
   @override
-  List<Object> get props => [recipeList];
+  List<Object?> get props => [recipeList];
 }
