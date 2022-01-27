@@ -1,22 +1,17 @@
 import 'package:recipe_flutter/blocs/main/base_bloc.dart';
 import 'package:recipe_flutter/blocs/user_interest/user_interest_event.dart';
 import 'package:recipe_flutter/blocs/user_interest/user_interest_state.dart';
-import 'package:recipe_flutter/core/usecase/usecase.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
-import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
 
 class UserInterestBloc extends BaseBloc<UserInterestEvent, UserInterestState> {
-  late FetchAllCuisines usecase;
-  late RecipeService recipeService;
+  final RecipeService recipeService;
 
-  UserInterestBloc(
-      this.recipeService, this.usecase)
-      : super(UserInterestState.initial());
+  UserInterestBloc(this.recipeService) : super(UserInterestState.initial());
 
   @override
   Stream<UserInterestState> mapEventToState(UserInterestEvent event) async* {
     if (event is LoadAllCuisines) {
-      var response = await usecase(NoParams());
+      var response = await recipeService.fetchAllCuisine();
       yield response.fold((l) => UserInterestState.error(),
           (r) => UserInterestState.primary(r));
     } else if (event is CuisineSelected) {

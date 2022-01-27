@@ -7,12 +7,12 @@ class RecipeListEvent extends AppEvent{
 
 
 class SearchRecipes extends RecipeListEvent {
-  String keyword;
-  bool isSearch;
+  final String keyword;
+  final bool isSearch;
   SearchRecipes({this.keyword="chicken",this.isSearch=false});
 }
 
 class SaveRecipes extends RecipeListEvent {
-  RecipeItem recipeItem;
+  final RecipeItem recipeItem;
   SaveRecipes(this.recipeItem);
 }

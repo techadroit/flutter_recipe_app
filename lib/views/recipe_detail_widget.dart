@@ -4,15 +4,10 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_event.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_state.dart';
-import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
-import 'package:recipe_flutter/core/network/network_handler.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/mapper/DataMapper.dart';
 import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
-import 'package:recipe_flutter/repository/network/remote_data_source.dart';
+import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
-import 'package:recipe_flutter/usecase/recipe_detail_usecase.dart';
 
 class RecipeDetailParentWidget extends StatefulWidget {
   @override
@@ -22,24 +17,13 @@ class RecipeDetailParentWidget extends StatefulWidget {
 }
 
 class RecipeDetailParentState extends State<RecipeDetailParentWidget> {
-
-  final RecipeRepository recipeRepository = RecipeRepository(
-   RemoteDataSource(NetworkHandler().dio),
-  );
-  late RecipeDetailBloc bloc;
-
-  RecipeDetailParentState(){
-    bloc = RecipeDetailBloc(recipeRepository);
-    bloc.fetchRecipeDetailUsecase  =
-        FetchRecipeDetailUsecase(recipeRepository,RecipeDetailMapper());
-  }
-
   @override
   Widget build(BuildContext context) {
     String id = ModalRoute.of(context)?.settings.arguments as String;
-    bloc.add(FetchRecipeDetail(id));
+    RecipeDetailBloc bloc = RecipeDetailBloc(context.read<RecipeService>());
+
     return BlocProvider(
-        create: (BuildContext context) => bloc,
+        create: (BuildContext context) => bloc..add(FetchRecipeDetail(id)),
         child: Scaffold(
           body: RecipeDetailWidget(),
         ));
@@ -58,7 +42,7 @@ class RecipeDetailWidget extends StatelessWidget {
             return Center(child: CircularProgressIndicator());
           } else if (state is RecipeDetailLoaded) {
             return getDetailBody(state.recipeDetail);
-          }else{
+          } else {
             return Container();
           }
         });
@@ -66,7 +50,6 @@ class RecipeDetailWidget extends StatelessWidget {
 }
 
 Widget getDetailBody(RecipeDetail recipeDetail) {
-
   var insets = EdgeInsets.only(left: 12, right: 12, top: 12);
   return ListView(
     children: <Widget>[
@@ -103,8 +86,9 @@ Widget getDetailBody(RecipeDetail recipeDetail) {
                 fontFamily: 'RobotoMono'),
           )),
       Padding(
-          padding:insets,
-          child: Html(data: recipeDetail.description,
+          padding: insets,
+          child: Html(
+            data: recipeDetail.description,
           )),
 //      getIngredients(recipeDetail.ingredientList)
     ],

@@ -8,6 +8,6 @@ class SaveBlocState extends AppState{}
 class SaveInitialState extends SaveBlocState{}
 
 class SavedRecipeLoaded extends SaveBlocState{
-  List<RecipeItem> recipeList;
+  final List<RecipeItem> recipeList;
   SavedRecipeLoaded(this.recipeList);
 }

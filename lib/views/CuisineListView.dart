@@ -5,13 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/cuisine_list/CuisineListBloc.dart';
 import 'package:recipe_flutter/blocs/cuisine_list/CuisineListEvent.dart';
 import 'package:recipe_flutter/blocs/cuisine_list/CuisineListState.dart';
-import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/main.dart';
-import 'package:recipe_flutter/repository/LocalRepository.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/model/Cuisine.dart';
-import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/views/list_widget.dart';
@@ -30,7 +27,7 @@ class CuisineWidget extends StatelessWidget {
       child: Navigator(
         key: _cuisineNavigationKey,
         initialRoute: cuisineList,
-        onGenerateRoute: _onGenerateRoute,
+        onGenerateRoute: (settings) => _onGenerateRoute(settings, context),
       ),
       onWillPop: () async {
         final NavigatorState? navigator = _cuisineNavigationKey.currentState;
@@ -40,14 +37,17 @@ class CuisineWidget extends StatelessWidget {
     );
   }
 
-  Route _onGenerateRoute(RouteSettings settings) {
+  Route _onGenerateRoute(RouteSettings settings, BuildContext context) {
+    final recipeService = context.read<RecipeService>();
+    final searchService = context.read<SearchRecipeService>();
     late Widget page;
     switch (settings.name) {
       case cuisineList:
-        page = CuisineListView();
+        page = CuisineListView(recipeService);
         break;
       case recipeList:
-        page = RecipeListContainerWidget.get(settings.arguments as SearchItem);
+        page = RecipeListContainerWidget.get(
+            settings.arguments as SearchItem, searchService);
         break;
     }
     return MaterialPageRoute<dynamic>(
@@ -63,11 +63,7 @@ class CuisineListView extends StatefulWidget {
   late RecipeService recipeService;
   late CuisineListBloc bloc;
 
-  CuisineListView() {
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    recipeService = RecipeService(LocalRepository(), recipeRepository);
+  CuisineListView(this.recipeService) {
     bloc = CuisineListBloc(recipeService)..add(LoadAllCuisines());
   }
 
@@ -116,7 +112,7 @@ class _CuisineListViewState extends State<CuisineListView> {
                                 ),
                                 SizedBox(
                                   height: 260,
-                                  child: RecipeList(recipeList,cuisine),
+                                  child: RecipeList(recipeList, cuisine),
                                 )
                               ],
                             );
@@ -138,9 +134,10 @@ class _CuisineListViewState extends State<CuisineListView> {
 }
 
 class RecipeList extends StatelessWidget {
-  late List<RecipeItem> list;
-  late Cuisine cuisine;
-  RecipeList(this.list,this.cuisine);
+  final List<RecipeItem> list;
+  final Cuisine cuisine;
+
+  RecipeList(this.list, this.cuisine);
 
   @override
   Widget build(BuildContext context) {
@@ -216,15 +213,16 @@ class RecipeGridItem extends State<RecipeGridItemStateFullWidget> {
 }
 
 class ViewAllView extends StatelessWidget {
+  final String cuisine;
 
-  String cuisine;
   ViewAllView(this.cuisine);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, recipeList,arguments: SearchItem(keyword: cuisine));
+        Navigator.pushNamed(context, recipeList,
+            arguments: SearchItem(keyword: cuisine));
       },
       child: Center(
         child: Padding(

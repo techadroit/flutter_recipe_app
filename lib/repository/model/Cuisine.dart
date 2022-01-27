@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 
 class Cuisine extends Equatable {
-  String cuisine;
-  bool isSelected;
+  final String cuisine;
+  final bool isSelected;
 
   Cuisine(this.cuisine, {this.isSelected = false});
 

@@ -4,23 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_bloc.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
-import 'package:recipe_flutter/core/network/network_handler.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/network/remote_data_source.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
-import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
+import 'package:recipe_flutter/views/error_screen.dart';
 import 'package:recipe_flutter/views/youtube_widget.dart';
 
 import 'modal/list_item.dart';
 
 class VideoListContainerWidget extends StatefulWidget {
-
-  static Widget get(){
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    var bloc = VideoRecipeBloc(recipeRepository);
-    bloc.videoRecipeUsecase = SearchVideoRecipeUsecase(recipeRepository);
+  static Widget get(SearchRecipeService recipeService) {
+    var bloc = VideoRecipeBloc(recipeService);
 
     return BlocProvider(
       key: PageStorageKey("video"),
@@ -65,9 +58,11 @@ class VideoRecipeListWidget extends State<VideoListContainerWidget> {
     return Center(
       child: BlocBuilder(
           bloc: bloc,
-          builder: (context, state) {
-            if (state is VideoRecipeLoaded) {
-              var list = state.list;
+          builder: (context, RecipeVideoState state) {
+            if (state.error != null) {
+              return ErrorScreen.get(state.error!.failure);
+            } else if (state.results.isNotEmpty) {
+              var list = state.results;
               return ListView.builder(
                   controller: _scrollController,
                   itemCount: list.length,
@@ -83,7 +78,7 @@ class VideoRecipeListWidget extends State<VideoListContainerWidget> {
 }
 
 class VideoRecipeItemWidget extends StatelessWidget {
-  VideoRecipeItem item;
+  final VideoRecipeItem item;
 
   VideoRecipeItemWidget(this.item);
 
@@ -97,11 +92,10 @@ class VideoRecipeItemWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           GestureDetector(
-            onTap: () =>
-               Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
-            ,
+            onTap: () => Navigator.of(context).pushNamed("/youtube_video",
+                arguments: YoutubeArgument(item.youtubeId)),
             child: Image.network(
-              item.thumbnailurl,
+              item.thumbnailUrl,
               height: 100,
               width: 120,
             ),
@@ -116,7 +110,7 @@ class VideoRecipeItemWidget extends StatelessWidget {
 }
 
 class VideoRecipeItemWidgetV2 extends StatelessWidget {
-  VideoRecipeItem item;
+  final VideoRecipeItem item;
 
   VideoRecipeItemWidgetV2(this.item);
 
@@ -127,36 +121,32 @@ class VideoRecipeItemWidgetV2 extends StatelessWidget {
       child: Column(
         children: <Widget>[
           GestureDetector(
-            onTap: () =>
-               Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId))
-            ,
-            child: Stack(
-              alignment: Alignment.center,
-              children:<Widget>[
-                Image.network(item.thumbnailurl,
-                height: IMAGE_HEIGHT, width: double.infinity, fit: BoxFit.cover),    
-                Container(
+            onTap: () => Navigator.of(context).pushNamed("/youtube_video",
+                arguments: YoutubeArgument(item.youtubeId)),
+            child: Stack(alignment: Alignment.center, children: <Widget>[
+              Image.network(item.thumbnailUrl,
                   height: IMAGE_HEIGHT,
                   width: double.infinity,
-                  color: Colors.black26,
-                ),           
-                  GestureDetector(
-                  onTap: (){
-                     Navigator.of(context).pushNamed("/youtube_video",arguments: YoutubeArgument(item.youtubeId));
+                  fit: BoxFit.cover),
+              Container(
+                height: IMAGE_HEIGHT,
+                width: double.infinity,
+                color: Colors.black26,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pushNamed("/youtube_video",
+                        arguments: YoutubeArgument(item.youtubeId));
                   },
-                  child:IconButton(
-                  iconSize: 64,
-                  color: Colors.white70,
-                  icon: Icon(
-                    Icons.play_circle_outline
-                    ),
-                   onPressed: (){})
-                )
-              ]
-            ),
+                  child: IconButton(
+                      iconSize: 64,
+                      color: Colors.white70,
+                      icon: Icon(Icons.play_circle_outline),
+                      onPressed: () {}))
+            ]),
           ),
           Container(
-              margin: EdgeInsets.only(left: 8, top: 16,bottom: 8),
+              margin: EdgeInsets.only(left: 8, top: 16, bottom: 8),
               child: Text(item.title))
         ],
       ),

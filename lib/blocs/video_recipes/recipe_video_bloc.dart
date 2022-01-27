@@ -1,17 +1,19 @@
 import 'package:recipe_flutter/blocs/main/base_bloc.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
+import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/usecase/recipe_search_usecase.dart';
+import 'package:recipe_flutter/repository/services/RecipeService.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
-
 
 class VideoRecipeBloc extends BaseBloc<RecipeVideoEvent, RecipeVideoState> {
   late final RecipeRepository repository;
   int offset = 0;
-  late SearchVideoRecipeUsecase videoRecipeUsecase;
+  late SearchRecipeService searchRecipeService;
 
-  VideoRecipeBloc(this.repository) : super(VideoRecipeUninitialized());
+  VideoRecipeBloc(this.searchRecipeService)
+      : super(RecipeVideoState.loading(true));
 
   @override
   Stream<RecipeVideoState> mapEventToState(RecipeVideoEvent event) async* {
@@ -21,21 +23,21 @@ class VideoRecipeBloc extends BaseBloc<RecipeVideoEvent, RecipeVideoState> {
   }
 
   Stream<RecipeVideoState> loadVideo() async* {
-    final currentState = state;
-    if (currentState is! VideoRecipeLoaded) yield VideoRecipeLoad(true);
-    var response = await videoRecipeUsecase(Param("chicken", offset));
-    yield response.fold((l) => VideoRecipeError(), (r) => onSuccessVideoLoad(r));
+    var response = await searchRecipeService
+        .loadVideoRecipesFor(ServiceParam("chicken", offset));
+    yield response.fold((l) => RecipeVideoState.onError(Error(ServerFailure())),
+        (r) => onSuccessVideoLoad(r));
     offset++;
   }
 
-  VideoRecipeLoaded onSuccessVideoLoad(List<VideoRecipeItem> newList) {
+  RecipeVideoState onSuccessVideoLoad(List<VideoRecipeItem> newList) {
     final currentState = state;
-    if (currentState is VideoRecipeLoaded) {
-      var currentList = currentState.list;
+    if (currentState.results.isNotEmpty) {
+      var currentList = currentState.results;
       var resultList = currentList + newList;
-      return VideoRecipeLoaded(resultList);
+      return RecipeVideoState.loaded(resultList);
     } else {
-      return VideoRecipeLoaded(newList);
+      return RecipeVideoState.loaded(newList);
     }
   }
 }
