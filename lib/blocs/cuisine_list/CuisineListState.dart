@@ -4,14 +4,15 @@ import 'package:recipe_flutter/views/modal/cuisine_with_recipe.dart';
 class CuisineListState extends AppState {
   List<CuisineWithRecipes> recipeList = List.empty(growable: true);
 
+  CuisineListState(this.recipeList);
+
   CuisineListState.initial();
 
-  CuisineListState.copyWithItem(
-      CuisineListState state, CuisineWithRecipes item) {
+  CuisineListState copyWith(CuisineWithRecipes item){
     var currentList = List<CuisineWithRecipes>.empty(growable: true);
-    currentList.addAll(state.recipeList);
+    currentList.addAll(this.recipeList);
     currentList.add(item);
-    this.recipeList = currentList;
+    return CuisineListState(currentList);
   }
 
   @override

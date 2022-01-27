@@ -15,12 +15,8 @@ class CuisineListBloc extends BaseBloc<CuisineListEvent, CuisineListState> {
   Stream<CuisineListState> mapEventToState(CuisineListEvent event) async* {
     if (event is LoadAllCuisines) {
       var stream = recipeService.loadRecipesWithCuisine();
-
-      // recipeSubscription = stream.listen((event) async* {
-      //   yield CuisineListState.copyWithItem(state, event);
-      // });
       await for (final value in stream){
-        yield CuisineListState.copyWithItem(state,value);
+        yield state.copyWith(value);
       }
     }
   }
