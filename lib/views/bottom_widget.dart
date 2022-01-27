@@ -1,23 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:recipe_flutter/repository/services/RecipeService.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/views/CuisineListView.dart';
 import 'package:recipe_flutter/views/saved_recipes.dart';
 import 'package:recipe_flutter/views/video_recipe_widget.dart';
 
 class BottomWidgetContainer extends StatefulWidget {
+  final RecipeService recipeService;
+  final SearchRecipeService searchRecipeService;
+
+  BottomWidgetContainer(this.recipeService, this.searchRecipeService);
+
   @override
   State<StatefulWidget> createState() {
-    return BottomWidgetState();
+    final list = [
+      CuisineWidget(),
+      VideoListContainerWidget.get(searchRecipeService),
+      SavedRecipeWidget(recipeService)
+    ];
+    return BottomWidgetState(list);
   }
 }
 
 class BottomWidgetState extends State<BottomWidgetContainer> {
-  final list = [
-    CuisineWidget(),
-    VideoListContainerWidget.get(),
-    SavedRecipeWidget()
-  ];
+  final List<Widget> list;
   int currentIndex = 0;
+
+  BottomWidgetState(this.list);
 
   @override
   Widget build(BuildContext context) {

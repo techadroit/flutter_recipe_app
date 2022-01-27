@@ -14,13 +14,9 @@ import 'modal/list_item.dart';
 
 class SavedRecipeWidget extends StatelessWidget {
   late SaveRecipeBloc bloc;
-  late RecipeService recipeService;
+  final RecipeService recipeService;
 
-  SavedRecipeWidget() {
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    recipeService = RecipeService(LocalRepository(), recipeRepository);
+  SavedRecipeWidget(this.recipeService) {
     bloc = SaveRecipeBloc(recipeService);
   }
 

@@ -4,10 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_bloc.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
-import 'package:recipe_flutter/core/network/network_handler.dart';
-import 'package:recipe_flutter/repository/LocalRepository.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/views/error_screen.dart';
@@ -16,13 +12,8 @@ import 'package:recipe_flutter/views/youtube_widget.dart';
 import 'modal/list_item.dart';
 
 class VideoListContainerWidget extends StatefulWidget {
-  static Widget get() {
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    SearchRecipeService service =
-        SearchRecipeService(LocalRepository(), recipeRepository);
-    var bloc = VideoRecipeBloc(service);
+  static Widget get(SearchRecipeService recipeService) {
+    var bloc = VideoRecipeBloc(recipeService);
 
     return BlocProvider(
       key: PageStorageKey("video"),

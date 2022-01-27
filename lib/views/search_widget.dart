@@ -4,22 +4,21 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_search/search_recipe_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_search/search_recipe_events.dart';
 import 'package:recipe_flutter/blocs/recipe_search/search_recipe_state.dart';
-import 'package:recipe_flutter/core/network/network_handler.dart';
 import 'package:recipe_flutter/main.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/network/remote_data_source.dart';
-import 'package:recipe_flutter/usecase/autocomplete_usecase.dart';
+import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 
 import 'modal/search_item.dart';
 
 class SearchWiget extends StatelessWidget {
+  final SearchRecipeService recipeService;
+  late SearchBlocs blocs;
+
+  SearchWiget(this.recipeService) {
+    blocs = SearchBlocs(recipeService);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    SearchBlocs blocs = SearchBlocs(recipeRepository);
-    blocs.usecase = AutocompleteUsecase(recipeRepository);
     return Scaffold(
         body: SafeArea(
             child: BlocProvider<SearchBlocs>(
@@ -97,7 +96,7 @@ Widget getSearchItemWidget(BuildContext context, String title) {
   return GestureDetector(
       onTap: () {
         Navigator.popAndPushNamed(context, searchListRoute,
-            arguments: SearchItem(keyword: title,search: true));
+            arguments: SearchItem(keyword: title, search: true));
       },
       child: Container(
           width: double.infinity,

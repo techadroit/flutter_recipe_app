@@ -3,10 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_events.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_list_bloc.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
-import 'package:recipe_flutter/core/network/network_handler.dart';
-import 'package:recipe_flutter/repository/LocalRepository.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
-import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/views/common/save_icon.dart';
@@ -72,27 +68,20 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
 }
 
 class RecipeListContainerWidget extends StatelessWidget {
-  static Widget get(SearchItem searchItem) {
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    SearchRecipeService recipeService =
-        SearchRecipeService(LocalRepository(), recipeRepository);
-    final listbloc = RecipeListBloc(recipeRepository, recipeService);
+  static Widget get(SearchItem searchItem, SearchRecipeService recipeService) {
+    final listBloc = RecipeListBloc(recipeService);
     return BlocProvider(
-      create: (BuildContext context) => listbloc,
+      create: (BuildContext context) => listBloc,
       child: RecipeListContainerWidget(searchItem),
     );
   }
 
-  late RecipeListBloc bloc;
-  late SearchItem searchItem;
+  final SearchItem searchItem;
 
   RecipeListContainerWidget(this.searchItem);
 
   @override
   Widget build(BuildContext context) {
-    bloc = BlocProvider.of(context);
     return Column(children: <Widget>[
       GestureDetector(
           onTap: () {
@@ -176,18 +165,17 @@ class RecipeListWidgetState extends State<RecipeListStateFullWidget> {
 }
 
 class RecipeAutoCompleteListWidget extends StatelessWidget {
+  final SearchRecipeService recipeService;
+
+  RecipeAutoCompleteListWidget(this.recipeService);
+
   @override
   Widget build(BuildContext context) {
     final SearchItem searchItem =
         ModalRoute.of(context)!.settings.arguments as SearchItem;
-    final RecipeRepository recipeRepository = RecipeRepository(
-      RemoteDataSource(NetworkHandler().dio),
-    );
-    SearchRecipeService recipeService =
-        SearchRecipeService(LocalRepository(), recipeRepository);
-    var listbloc = RecipeListBloc(recipeRepository, recipeService);
+    var listbloc = RecipeListBloc(recipeService);
     return BlocProvider(
-        create: (BuildContext buildcontext) => listbloc,
+        create: (buildContext) => listbloc,
         child: Container(
           color: Colors.white,
           child: RecipeListStateFullWidget(searchItem),

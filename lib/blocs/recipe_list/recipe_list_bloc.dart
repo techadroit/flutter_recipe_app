@@ -3,20 +3,17 @@ import 'package:recipe_flutter/blocs/main/either.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_events.dart';
 import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
-import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 
 class RecipeListBloc extends BaseBloc<RecipeListEvent, RecipeState> {
-  late final RecipeRepository repository;
   int offset = 0;
   late SearchRecipeService recipeService;
   String keyword = "";
   List<RecipeItem> recipeList = List.empty(growable: true);
 
-  RecipeListBloc(this.repository, this.recipeService)
-      : super(RecipeState.loading(true));
+  RecipeListBloc(this.recipeService) : super(RecipeState.loading(true));
 
   @override
   Stream<RecipeState> mapEventToState(RecipeListEvent event) async* {
