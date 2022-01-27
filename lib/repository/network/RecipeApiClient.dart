@@ -10,7 +10,7 @@ import 'package:recipe_flutter/api_response/search_video_recipes_response.dart';
 class RecipeApiClient {
   static const baseurl = 'https://api.spoonacular.com';
   static const imageBaseurl = 'https://spoonacular.com/recipeImages/';
-  static const apikey = '95aed809c8d84dd6b831b9aaa35c5f24';
+  static const apikey = '';
   final http.Client httpClient;
 
   RecipeApiClient(this.httpClient);
