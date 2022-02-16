@@ -11,7 +11,7 @@ import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
-import 'package:recipe_flutter/views/list_widget.dart';
+import 'package:recipe_flutter/views/recipes_list/list_widget.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 import 'package:recipe_flutter/views/modal/search_item.dart';
 

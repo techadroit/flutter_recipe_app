@@ -9,8 +9,8 @@ import 'package:recipe_flutter/repository/RecipeRepository.dart';
 import 'package:recipe_flutter/repository/network/remote_data_source.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
 
-import 'list_widget.dart';
-import 'modal/list_item.dart';
+import '../recipes_list/list_widget.dart';
+import '../modal/list_item.dart';
 
 class SavedRecipeWidget extends StatelessWidget {
   late SaveRecipeBloc bloc;

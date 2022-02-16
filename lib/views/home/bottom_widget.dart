@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
-import 'package:recipe_flutter/views/CuisineListView.dart';
-import 'package:recipe_flutter/views/saved_recipes.dart';
-import 'package:recipe_flutter/views/video_recipe_widget.dart';
+import 'package:recipe_flutter/views/cuisine/CuisineListView.dart';
+import 'package:recipe_flutter/views/saved_recipes/saved_recipes.dart';
+import 'package:recipe_flutter/views/recipe_videos/video_recipe_widget.dart';
 
 class BottomWidgetContainer extends StatefulWidget {
   final RecipeService recipeService;

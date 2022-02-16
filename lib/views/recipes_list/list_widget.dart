@@ -6,11 +6,11 @@ import 'package:recipe_flutter/blocs/recipe_list/recipe_state.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/views/common/save_icon.dart';
-import 'package:recipe_flutter/views/error_screen.dart';
+import 'package:recipe_flutter/views/main/error_screen.dart';
 
-import '../main.dart';
-import 'modal/list_item.dart';
-import 'modal/search_item.dart';
+import '../../main.dart';
+import '../modal/list_item.dart';
+import '../modal/search_item.dart';
 
 class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
   RecipeItem item;

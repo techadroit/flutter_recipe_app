@@ -7,7 +7,7 @@ import 'package:recipe_flutter/blocs/recipe_search/search_recipe_state.dart';
 import 'package:recipe_flutter/main.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 
-import 'modal/search_item.dart';
+import '../modal/search_item.dart';
 
 class SearchWiget extends StatelessWidget {
   final SearchRecipeService recipeService;

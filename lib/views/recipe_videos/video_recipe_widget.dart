@@ -6,10 +6,10 @@ import 'package:recipe_flutter/blocs/video_recipes/recipe_video_events.dart';
 import 'package:recipe_flutter/blocs/video_recipes/recipe_video_state.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/shared/dimens.dart';
-import 'package:recipe_flutter/views/error_screen.dart';
-import 'package:recipe_flutter/views/youtube_widget.dart';
+import 'package:recipe_flutter/views/main/error_screen.dart';
+import 'package:recipe_flutter/views/recipe_videos/youtube_widget.dart';
 
-import 'modal/list_item.dart';
+import '../modal/list_item.dart';
 
 class VideoListContainerWidget extends StatefulWidget {
   static Widget get(SearchRecipeService recipeService) {
