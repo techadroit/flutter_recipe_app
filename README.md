@@ -20,6 +20,12 @@ A Simple recipe app build in flutter. This Repo demonstrate how we can use [Bloc
 
 Create api key from [Sponnacular](https://spoonacular.com/) and assign it to apikey variable in the RemoteApiClient class.
 
+## Tech Stack
+
+- [Bloc](https://bloclibrary.dev/#/) </br>
+- [Dio](https://pub.dev/packages/dio) </br>
+- [Sqflite](https://pub.dev/packages/sqflite) </br>
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
