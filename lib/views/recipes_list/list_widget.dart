@@ -50,11 +50,6 @@ class RecipeListItemWidgetV2 extends State<RecipeListItemStateFullWidget> {
                                       padding: EdgeInsets.all(8),
                                       child: Text(
                                         item.heading,
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'RobotoMono'),
                                       )),
                                 ])),
                             SaveIconWidget(item.isSaved, () {

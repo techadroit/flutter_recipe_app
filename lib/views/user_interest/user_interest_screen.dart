@@ -29,9 +29,9 @@ class UserInterestScreenWidgetState extends State<UserInterestScreenWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: BlocProvider<UserInterestBloc>(
+    return SafeArea(
+      child: Scaffold(
+        body: BlocProvider<UserInterestBloc>(
           create: (context) {
             return bloc;
           },
@@ -45,15 +45,14 @@ class UserInterestScreenWidgetState extends State<UserInterestScreenWidget> {
               bloc: bloc..add(LoadAllCuisines()),
               builder: (context, state) {
                 if (state.allCuisines.isNotEmpty)
-                  return Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text("Select Atleast 5 Cuisines"),
-                        ChipListWidget(state.allCuisines),
-                        if (state.enableNextOptions) NextButton()
-                      ],
-                    ),
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Padding(padding: EdgeInsets.all(20),
+                        child: Text("Select At'least 5 Cuisines"),),
+                      ChipListWidget(state.allCuisines),
+                      if (state.enableNextOptions) NextButton()
+                    ],
                   );
                 else {
                   return Container();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/shared/colors.dart';
 import 'package:recipe_flutter/shared/textstyle.dart';
+import 'package:recipe_flutter/extensions/buildcontext_ext.dart';
 
 class ErrorScreen extends StatelessWidget {
   static ErrorScreen get(Failure failure) {
@@ -25,7 +26,7 @@ class ErrorScreen extends StatelessWidget {
           padding: EdgeInsets.all(24),
           child: Text(
             message,
-            style: errorStyle,
+            style: context.primaryErrorStyle(),
           ),
         ),
       ),
@@ -46,7 +47,7 @@ class InvalidKeyErrorScreen extends StatelessWidget {
               child: Text(
                 "No api key found. "
                 "Please check the readme for more information.",
-                style: errorStyle,
+                style: context.primaryErrorStyle(),
               ),
             ),
           ),

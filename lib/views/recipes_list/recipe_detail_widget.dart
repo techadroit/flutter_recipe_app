@@ -6,8 +6,7 @@ import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_event.dart';
 import 'package:recipe_flutter/blocs/recipe_detail/recipe_detail_state.dart';
 import 'package:recipe_flutter/repository/model/RecipeDetail.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
-import 'package:recipe_flutter/shared/colors.dart';
-import 'package:recipe_flutter/shared/dimens.dart';
+import 'package:recipe_flutter/extensions/buildcontext_ext.dart';
 
 class RecipeDetailParentWidget extends StatefulWidget {
   @override
@@ -41,7 +40,7 @@ class RecipeDetailWidget extends StatelessWidget {
           if (state is RecipeInitialState || state is RecipeDetailLoading) {
             return Center(child: CircularProgressIndicator());
           } else if (state is RecipeDetailLoaded) {
-            return getDetailBody(state.recipeDetail);
+            return getDetailBody(state.recipeDetail, context);
           } else {
             return Container();
           }
@@ -49,7 +48,7 @@ class RecipeDetailWidget extends StatelessWidget {
   }
 }
 
-Widget getDetailBody(RecipeDetail recipeDetail) {
+Widget getDetailBody(RecipeDetail recipeDetail, BuildContext context) {
   var insets = EdgeInsets.only(left: 12, right: 12, top: 12);
   return ListView(
     children: <Widget>[
@@ -62,28 +61,21 @@ Widget getDetailBody(RecipeDetail recipeDetail) {
         padding: insets,
         child: Text(
           recipeDetail.title,
-          style: TextStyle(
-              color: titleColor,
-              fontFamily: 'RobotMono-Bold',
-              fontWeight: FontWeight.bold,
-              fontSize: TITLE_TEXT_SIZE),
+          style: context.primaryHead2(),
         ),
       ),
       Padding(
           padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: 12),
           child: Text(
             recipeDetail.sourceName,
-            style: TextStyle(color: Colors.grey, fontSize: 10),
+            style: context.ascentSubtitle2()
           )),
-      Padding(padding: insets, child: getTimeInfo(recipeDetail)),
+      Padding(padding: insets, child: getTimeInfo(recipeDetail,context)),
       Padding(
           padding: insets,
           child: Text(
             "Description",
-            style: TextStyle(
-                color: Colors.grey[700],
-                fontSize: 15,
-                fontFamily: 'RobotoMono'),
+            style: context.ascentSubtitle1(),
           )),
       Padding(
           padding: insets,
@@ -104,33 +96,26 @@ Widget getIngredients(List<RecipeIngredients> list) {
       });
 }
 
-Widget getTimeInfo(RecipeDetail recipeDetail) {
+Widget getTimeInfo(RecipeDetail recipeDetail,BuildContext context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
     children: <Widget>[
       getHorizontalTextView(
-          "Servings", recipeDetail.servings.toString() + "ppl"),
+          "Servings", recipeDetail.servings.toString() + "ppl",context),
       getHorizontalTextView(
-          "Cook Time", recipeDetail.readInMinute.toString() + "m"),
-      getHorizontalTextView("Score", recipeDetail.score.toString()),
+          "Cook Time", recipeDetail.readInMinute.toString() + "m",context),
+      getHorizontalTextView("Score", recipeDetail.score.toString(),context),
     ],
   );
 }
 
-Widget getHorizontalTextView(String text1, String text2) {
+Widget getHorizontalTextView(String text1, String text2,BuildContext context) {
   return Column(children: <Widget>[
     Text(
       text1,
-      style: TextStyle(
-          color: Colors.grey[700], fontSize: 12, fontFamily: 'RobotoMono'),
+      style: context.ascentBody1(),
     ),
     Text(text2,
-        style: TextStyle(
-            color: Colors.black,
-            fontSize: 15,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'))
+        style: context.ascentBody2())
   ]);
 }
-
-var headingStyle = TextStyle(color: Colors.black, fontWeight: FontWeight.bold);

@@ -14,6 +14,7 @@ import 'package:recipe_flutter/shared/dimens.dart';
 import 'package:recipe_flutter/views/recipes_list/list_widget.dart';
 import 'package:recipe_flutter/views/modal/list_item.dart';
 import 'package:recipe_flutter/views/modal/search_item.dart';
+import 'package:recipe_flutter/extensions/buildcontext_ext.dart';
 
 final _cuisineNavigationKey = GlobalKey<NavigatorState>();
 
@@ -202,10 +203,7 @@ class RecipeGridItem extends State<RecipeGridItemStateFullWidget> {
                               item.heading,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black,
-                                  fontFamily: 'Raleway-SemiBold'),
+                              style: context.primaryBody2(),
                             )),
                       ),
                     ])))));
@@ -227,12 +225,7 @@ class ViewAllView extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: EdgeInsets.all(12),
-          child: Text("View All",
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Raleway')),
+          child: Text("View All",style: context.primaryHead1()),
         ),
       ),
     );
