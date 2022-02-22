@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_flutter/core/error/failures.dart';
 import 'package:recipe_flutter/shared/colors.dart';
-import 'package:recipe_flutter/shared/textstyle.dart';
 import 'package:recipe_flutter/extensions/buildcontext_ext.dart';
 
 class ErrorScreen extends StatelessWidget {
