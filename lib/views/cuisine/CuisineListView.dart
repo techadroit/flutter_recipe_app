@@ -104,11 +104,7 @@ class _CuisineListViewState extends State<CuisineListView> {
                                   padding: EdgeInsets.all(8),
                                   child: Text(
                                     cuisine.cuisine,
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        color: titleColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'RobotoMono'),
+                                    style: context.primaryHead3(),
                                   ),
                                 ),
                                 SizedBox(

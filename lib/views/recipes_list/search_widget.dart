@@ -28,7 +28,6 @@ class SearchWiget extends StatelessWidget {
 
 Widget searchWidget() {
   return Container(
-      color: Colors.white,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[SearchWidget(), Expanded(child: SearchListWidget())],
@@ -50,7 +49,6 @@ class _SearchStateLessWidgetState extends State<SearchWidget> {
         margin: EdgeInsets.all(8),
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-            color: Colors.white,
             border: Border.all(width: 1.0, color: Colors.grey),
             borderRadius: BorderRadius.all(Radius.circular(12.0))),
         child: Row(children: [
@@ -84,7 +82,6 @@ class SearchListWidget extends StatelessWidget {
                 });
           } else {
             return Container(
-              color: Colors.white,
               child: Text("No Result Found"),
             );
           }

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:recipe_flutter/repository/services/RecipeService.dart';
 import 'package:recipe_flutter/repository/services/SearchRecipeService.dart';
 import 'package:recipe_flutter/views/cuisine/CuisineListView.dart';
-import 'package:recipe_flutter/views/saved_recipes/saved_recipes.dart';
 import 'package:recipe_flutter/views/recipe_videos/video_recipe_widget.dart';
+import 'package:recipe_flutter/views/saved_recipes/saved_recipes.dart';
+import 'package:recipe_flutter/views/settings/settings_view.dart';
 
 class BottomWidgetContainer extends StatefulWidget {
   final RecipeService recipeService;
@@ -17,7 +18,8 @@ class BottomWidgetContainer extends StatefulWidget {
     final list = [
       CuisineWidget(),
       VideoListContainerWidget.get(searchRecipeService),
-      SavedRecipeWidget(recipeService)
+      SavedRecipeWidget(recipeService),
+      SettingScreen()
     ];
     return BottomWidgetState(list);
   }
@@ -35,26 +37,21 @@ class BottomWidgetState extends State<BottomWidgetContainer> {
         child: Scaffold(
       body: list[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
           onTap: (index) {
             setState(() {
               currentIndex = index;
             });
           },
           currentIndex: currentIndex,
-          backgroundColor: Colors.white,
           items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Recipes"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                backgroundColor: Colors.blue,
-                label: "Recipes"),
+                icon: Icon(Icons.video_call), label: "Videos"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.video_call),
-                backgroundColor: Colors.blue,
-                label: "Videos"),
+                icon: Icon(Icons.account_box), label: "SavedRecipe"),
             BottomNavigationBarItem(
-                icon: Icon(Icons.account_box),
-                backgroundColor: Colors.blue,
-                label: "SavedRecipe"),
+                icon: Icon(Icons.settings), label: "Settings"),
           ]),
     ));
   }
